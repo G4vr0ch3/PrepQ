@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_3961dd5b15b84c24ba3d6a2e61e7a42b {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+            <div class="folium-map" id="map_3961dd5b15b84c24ba3d6a2e61e7a42b" ></div>
+        
+</body>
+<script>    
+    
+            var map_3961dd5b15b84c24ba3d6a2e61e7a42b = L.map(
+                "map_3961dd5b15b84c24ba3d6a2e61e7a42b",
+                {
+                    center: [48.3, -4.9],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 10,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_7f1730179a574c3eabb5f24919a7786b = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_3961dd5b15b84c24ba3d6a2e61e7a42b);
+        
+    
+
+        function geo_json_0fca1688ddad48f395d76c3158d697db_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_0fca1688ddad48f395d76c3158d697db = L.geoJson(null, {
+                onEachFeature: geo_json_0fca1688ddad48f395d76c3158d697db_onEachFeature,
+            
+        });
+
+        function geo_json_0fca1688ddad48f395d76c3158d697db_add (data) {
+            geo_json_0fca1688ddad48f395d76c3158d697db
+                .addData(data)
+                .addTo(map_3961dd5b15b84c24ba3d6a2e61e7a42b);
+        }
+            geo_json_0fca1688ddad48f395d76c3158d697db_add({"features": [{"geometry": {"coordinates": [[[-4.532142, 48.341484], [-4.533467, 48.341954], [-4.540131, 48.340399], [-4.541279, 48.340813], [-4.548478, 48.338716], [-4.555072, 48.338413], [-4.564863, 48.331232], [-4.571046, 48.33032], [-4.570962, 48.327296], [-4.57859, 48.324849], [-4.580544, 48.319566], [-4.614191, 48.337483], [-4.610811, 48.338717], [-4.608676, 48.338068], [-4.577703, 48.349205], [-4.572141, 48.349224], [-4.569999, 48.351566], [-4.566759, 48.352029], [-4.567038, 48.354874], [-4.56383, 48.356393], [-4.56074, 48.356258], [-4.558626, 48.354347], [-4.554101, 48.361671], [-4.550126, 48.361999], [-4.537711, 48.357184], [-4.53357, 48.357904]]], "type": "Polygon"}, "id": "GB", "properties": {"name": "Goulet de Brest"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-4.845406491891601, 48.325510726410364], [-4.778930317987753, 48.324446798147854], [-4.792014970126544, 48.362023645416], [-4.7955378782819045, 48.37155551952714], [-4.7979728293142125, 48.39631594725119], [-4.840691531958303, 48.40120117440112], [-4.835781616840316, 48.356099654591816], [-4.839806346092392, 48.3309778951931]]], "type": "Polygon"}, "id": "CF", "properties": {"name": "Chenal du Four"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-4.716995017532506, 48.06130625841631], [-4.71553509169561, 48.06007411167564], [-4.71391504793349, 48.059048669066634], [-4.715234694662884, 48.057858307215994], [-4.714054524133989, 48.05624956065619], [-4.713352388374013, 48.05590536259392], [-4.71203274164462, 48.05607747133258], [-4.712343877865371, 48.05478664176963], [-4.714425271893846, 48.053725268775], [-4.713827414655855, 48.05276678321758], [-4.707338418680743, 48.049745951052635], [-4.709711185876163, 48.043986916668935], [-4.7332995437332235, 48.041628320474075], [-4.740798362371092, 48.04064837267143], [-4.7404915931875955, 48.03948608475935], [-4.737543733145491, 48.03939675756725], [-4.727550249310491, 48.033518811839436], [-4.757287798143168, 48.01685557429558], [-4.8299244354280475, 48.01685557429558], [-4.832822655369589, 48.03163569265656], [-4.832801236712817, 48.0330940446491], [-4.8362281959994435, 48.03426648386614], [-4.83845970378058, 48.03181498995298], [-4.840691211561715, 48.0326676967162], [-4.848581185502157, 48.03245452134823], [-4.848899972328034, 48.0379967943061], [-4.844118169939887, 48.040767707231794], [-4.838163054038563, 48.05669671951234], [-4.838119977426026, 48.06718073001598], [-4.716995017532506, 48.06130625841631]]], "type": "Polygon"}, "id": "RZ", "properties": {"name": "Raz de Sein"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            var marker_da60e968560249749a8aa728c50fd3b2 = L.marker(
+                [48.34178879997596, -4.5686087418455195],
+                {}
+            ).addTo(map_3961dd5b15b84c24ba3d6a2e61e7a42b);
+        
+    
+        var popup_d405bb755265456da3ccb9cf5d03e5f3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b899e2af060f424fa3ad6c3514cad3a2 = $(`<div id="html_b899e2af060f424fa3ad6c3514cad3a2" style="width: 100.0%; height: 100.0%;"><p>Bonjour</p><a href="GB.html"> <button type="button" class="btn btn-primary">Goulet de Brest</button></a></div>`)[0];
+            popup_d405bb755265456da3ccb9cf5d03e5f3.setContent(html_b899e2af060f424fa3ad6c3514cad3a2);
+        
+
+        marker_da60e968560249749a8aa728c50fd3b2.bindPopup(popup_d405bb755265456da3ccb9cf5d03e5f3)
+        ;
+
+        
+    
+    
+            var marker_5be7950444724d12b84fd63499aae84a = L.marker(
+                [48.35915532592553, -4.8143477552348015],
+                {}
+            ).addTo(map_3961dd5b15b84c24ba3d6a2e61e7a42b);
+        
+    
+        var popup_f1454267bf1642ebac95ee227dc2755e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7c9ddf8f54224be8a70c562afa9ac060 = $(`<div id="html_7c9ddf8f54224be8a70c562afa9ac060" style="width: 100.0%; height: 100.0%;"><p>Bonjour</p><a href="CF.html"> <button type="button" class="btn btn-primary">Chenal du Four</button></a></div>`)[0];
+            popup_f1454267bf1642ebac95ee227dc2755e.setContent(html_7c9ddf8f54224be8a70c562afa9ac060);
+        
+
+        marker_5be7950444724d12b84fd63499aae84a.bindPopup(popup_f1454267bf1642ebac95ee227dc2755e)
+        ;
+
+        
+    
+    
+            var marker_82367a710ca44c4ea8df25a94dbcab2e = L.marker(
+                [48.04249669615488, -4.783415966560811],
+                {}
+            ).addTo(map_3961dd5b15b84c24ba3d6a2e61e7a42b);
+        
+    
+        var popup_e249a72b1b364568bcccee4981cba1bc = L.popup({"maxWidth": "100%"});
+
+        
+            var html_de193de554bb464c9503f3d1cb8bac0d = $(`<div id="html_de193de554bb464c9503f3d1cb8bac0d" style="width: 100.0%; height: 100.0%;"><p>Bonjour</p><a href="RZ.html"> <button type="button" class="btn btn-primary">Raz de Sein</button></a></div>`)[0];
+            popup_e249a72b1b364568bcccee4981cba1bc.setContent(html_de193de554bb464c9503f3d1cb8bac0d);
+        
+
+        marker_82367a710ca44c4ea8df25a94dbcab2e.bindPopup(popup_e249a72b1b364568bcccee4981cba1bc)
+        ;
+
+        
+    
+</script>
