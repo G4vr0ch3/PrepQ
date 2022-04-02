@@ -13,7 +13,7 @@ def create(map):
 	df.head(2)
 
 	for i in range(len(df)):
-		html = """<p>Bonjour</p><a href="{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(df["id"][i], df["name"][i])
+		html = """<p>{}</p><a href="{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(df["infos"][i], df["id"][i], df["name"][i])
 		lon = df["geometry"][i].centroid.x
 		lat = df["geometry"][i].centroid.y
 

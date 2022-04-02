@@ -11,47 +11,109 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 
 import os
+import PySide2
 import resources_rc
 import geopandas as gpd
 
 
-def init():
-    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
-    local_url = QUrl.fromLocalFile(file_path)
 
-    self.ui.webEngineView.load(QUrl(local_url))
+font = QFont()
+font.setPointSize(12)
+font.setBold(True)
+font.setWeight(75)
+
+font1 = QFont()
+font1.setPointSize(11)
+font1.setBold(True)
+font1.setItalic(True)
+font1.setWeight(75)
+
+font2 = QFont()
+font2.setFamily(u"URW Gothic")
+font2.setPointSize(20)
+font2.setBold(True)
+font2.setWeight(75)
 
 
-class myListWidget(QListWidget):
-
-   def Clicked(self,item):
-       QMessageBox.information(self, "ListWidget", "You clicked: "+item.text())
-
-
-
-def printlst(self, MainWindow):
-
-    font2 = QFont()
-    font2.setFamily(u"URW Gothic")
-    font2.setPointSize(20)
-    font2.setBold(True)
-    font2.setWeight(75)
-
-    self.navlist = myListWidget(self.page_2)
-    self.navlist.setObjectName(u"navlist")
-    self.navlist.setFont(font2)
+def getid(item):
 
     df = gpd.read_file("zones.json")
     df.head(2)
 
-    for i in df["name"]:
-        self.navlist.addItem(i)
+    nme = item.text()
+    nme = nme.split(" - ")
+    nme = nme[0]
 
-    self.navlist.itemClicked.connect(self.navlist.Clicked)
-    self.verticalLayout_9.addWidget(self.navlist)
+    for i in range(len(df)):
+        if (df["name"][i] == nme):
+            return df["id"][i]
+
+    return "notfound"
+
+class returnBtn(QPushButton):
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"returnButton")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/icons/skip-back.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.setIcon(icon1)
+        self.setIconSize(QSize(24, 24))
+        self.setFont(font1)
+
+
+    def returnB(self):
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
+        local_url = QUrl.fromLocalFile(file_path)
+        self.window().ui.webEngineView.load(QUrl(local_url))
+
+    def returnA(self):
+        self.window().ui.render.hide()
+        self.window().ui.rtbtn.hide()
+
+class CustList(QListWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"navlist")
+        self.setFont(font2)
+
+        df = gpd.read_file("zones.json")
+        df.head(2)
+
+        for i in range(len(df)):
+            item = df["name"][i] + " - " + df["infos"][i]
+            self.addItem(item)
+
+        self.itemClicked.connect(self.Clicked)
+
+
+    def Clicked(self, item):
+        self.window().ui.verticalLayout_9.removeWidget(self.window().ui.navlist)
+        self.window().ui.render = self.window().uirender = QWebEngineView()
+        self.window().ui.render.setObjectName(u"render")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.window().ui.render.sizePolicy().hasHeightForWidth())
+        self.window().ui.render.setSizePolicy(sizePolicy2)
+        self.window().ui.render.setMinimumSize(QSize(0, 0))
+        id = getid(item)
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "{}.html".format(id)))
+        url = QUrl.fromLocalFile(file_path)
+        self.window().ui.render.setUrl(QUrl(url))
+        self.window().ui.render.load(QUrl(url))
+        self.window().ui.verticalLayout_9.addWidget(self.window().ui.render)
+
+        self.window().ui.rtbtn = returnBtn()
+        self.window().ui.rtbtn.setText("Retour à la liste")
+        self.window().ui.rtbtn.clicked.connect(self.window().ui.rtbtn.returnA)
+        self.window().ui.verticalLayout_9.addWidget(self.window().ui.rtbtn)
+        self.window().ui.page_2.setLayout(self.window().ui.verticalLayout_9)
+
+
+
 
 class Ui_MainWindow(object):
-
 
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -81,6 +143,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(20, 28, 39);\n"
 "}\n"
 "")
+
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -104,10 +167,7 @@ class Ui_MainWindow(object):
         self.toggle_button = QPushButton(self.toggle_button_cont)
         self.toggle_button.setObjectName(u"toggle_button")
         self.toggle_button.setMinimumSize(QSize(200, 0))
-        font = QFont()
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
+
         self.toggle_button.setFont(font)
         icon = QIcon()
         icon.addFile(u":/icons/icons/align-left.svg", QSize(), QIcon.Normal, QIcon.Off)
@@ -274,11 +334,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.setContentsMargins(-1, -1, 0, -1)
         self.label = QLabel(self.widget_5)
         self.label.setObjectName(u"label")
-        font1 = QFont()
-        font1.setPointSize(11)
-        font1.setBold(True)
-        font1.setItalic(True)
-        font1.setWeight(75)
+
         self.label.setFont(font1)
 
         self.verticalLayout_6.addWidget(self.label)
@@ -315,11 +371,6 @@ class Ui_MainWindow(object):
         self.page.setObjectName(u"page")
         self.verticalLayout_8 = QVBoxLayout(self.page)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        font2 = QFont()
-        font2.setFamily(u"URW Gothic")
-        font2.setPointSize(20)
-        font2.setBold(True)
-        font2.setWeight(75)
 
         self.scrollArea = QScrollArea(self.page)
         self.scrollArea.setObjectName(u"scrollArea")
@@ -339,21 +390,14 @@ class Ui_MainWindow(object):
         self.webEngineView.setMinimumSize(QSize(0, 0))
         self.webEngineView.setUrl(QUrl(u"about:blank"))
 
-        def returnB():
-            self.webEngineView.load(QUrl(local_url))
+
 
         file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
         local_url = QUrl.fromLocalFile(file_path)
 
-        self.returnButton = QPushButton()
-        self.returnButton.setObjectName(u"returnButton")
-        icon1 = QIcon()
-        icon1.addFile(u":/icons/icons/skip-back.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.returnButton.setIcon(icon1)
-        self.returnButton.setIconSize(QSize(24, 24))
-        self.returnButton.setFont(font1)
+        self.returnButton = returnBtn()
         self.returnButton.setText("Retour à la carte")
-        self.returnButton.clicked.connect(returnB)
+        self.returnButton.clicked.connect(self.returnButton.returnB)
 
         self.verticalLayout_14.addWidget(self.webEngineView)
 
@@ -368,9 +412,14 @@ class Ui_MainWindow(object):
 
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
-        self.verticalLayout_9 = QVBoxLayout(self.page_2)
+        self.verticalLayout_9 = QVBoxLayout()
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        printlst(self, MainWindow)
+
+        self.navlist = CustList()
+
+        self.verticalLayout_9.addWidget(self.navlist)
+
+        self.page_2.setLayout(self.verticalLayout_9)
 
         self.stackedWidget.addWidget(self.page_2)
         self.page_3 = QWidget()
