@@ -11,6 +11,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 
 import os
+import webbrowser
 import PySide2
 import resources_rc
 import geopandas as gpd
@@ -37,18 +38,48 @@ font2.setWeight(75)
 
 def getid(item):
 
-    df = gpd.read_file("zones.json")
-    df.head(2)
+    try:
+        df = gpd.read_file("zones.json")
+        df.head(2)
 
-    nme = item.text()
-    nme = nme.split(" - ")
-    nme = nme[0]
+        nme = item.text()
+        nme = nme.split(" - ")
+        nme = nme[0]
 
-    for i in range(len(df)):
-        if (df["name"][i] == nme):
-            return df["id"][i]
+        for i in range(len(df)):
+            if (df["name"][i] == nme):
+                return df["id"][i]
 
-    return "notfound"
+        return "notfound"
+
+    except:
+        try:
+            print("Trying old json file")
+            df = gpd.read_file("zones.json.old")
+            df.head(2)
+
+            nme = item.text()
+            nme = nme.split(" - ")
+            nme = nme[0]
+
+            for i in range(len(df)):
+                if (df["name"][i] == nme):
+                    return df["id"][i]
+
+            rfile = open("zones.json.old", "r")
+            file = open("zones.json", "w")
+            file.write(rfile.read())
+
+            return "notfound"
+
+        except:
+            print("Error loading json file.")
+
+
+
+class donatebtn(QPushButton):
+    def donate(self):
+        webbrowser.open("https://www.paypal.com/paypalme/AReppelin")
 
 class returnBtn(QPushButton):
     def __init__(self):
@@ -77,12 +108,30 @@ class CustList(QListWidget):
         self.setObjectName(u"navlist")
         self.setFont(font2)
 
-        df = gpd.read_file("zones.json")
-        df.head(2)
+        try:
+            df = gpd.read_file("zones.json")
+            df.head(2)
 
-        for i in range(len(df)):
-            item = df["name"][i] + " - " + df["infos"][i]
-            self.addItem(item)
+            for i in range(len(df)):
+                item = df["name"][i] + " - " + df["infos"][i]
+                self.addItem(item)
+
+        except:
+            try:
+                print("Trying old json file")
+                df = gpd.read_file("zones.json.old")
+                df.head(2)
+
+                for i in range(len(df)):
+                    item = df["name"][i] + " - " + df["infos"][i]
+                    self.addItem(item)
+
+                rfile = open("zones.json.old", "r")
+                file = open("zones.json", "w")
+                file.write(rfile.read())
+
+            except:
+                print("Error loading json file.")
 
         self.itemClicked.connect(self.Clicked)
 
@@ -309,7 +358,7 @@ class Ui_MainWindow(object):
         self.reports_btn = QPushButton(self.widget_3)
         self.reports_btn.setObjectName(u"reports_btn")
         icon8 = QIcon()
-        icon8.addFile(u":/icons/icons/monitor.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon8.addFile(u":/icons/icons/upload.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.reports_btn.setIcon(icon8)
         self.reports_btn.setIconSize(QSize(24, 24))
 
@@ -348,6 +397,22 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_6.addWidget(self.settings_btns)
 
+        self.label_3 = QLabel(self.widget_5)
+        self.label_3.setObjectName(u"label_3")
+
+        self.label_3.setFont(font1)
+
+        self.verticalLayout_6.addWidget(self.label_3)
+
+        self.donatebtn = donatebtn()
+        self.donatebtn.setObjectName(u"donatebtn")
+        icon11 = QIcon()
+        icon11.addFile(u":/icons/icons/coffee.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.donatebtn.setIcon(icon11)
+        self.donatebtn.setIconSize(QSize(24, 24))
+        self.donatebtn.clicked.connect(self.donatebtn.donate)
+
+        self.verticalLayout_6.addWidget(self.donatebtn)
 
         self.verticalLayout_5.addWidget(self.widget_5)
 
@@ -426,12 +491,6 @@ class Ui_MainWindow(object):
         self.page_3.setObjectName(u"page_3")
         self.verticalLayout_10 = QVBoxLayout(self.page_3)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.label_5 = QLabel(self.page_3)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setFont(font2)
-        self.label_5.setAlignment(Qt.AlignCenter)
-
-        self.verticalLayout_10.addWidget(self.label_5)
 
         self.stackedWidget.addWidget(self.page_3)
         self.page_4 = QWidget()
@@ -517,9 +576,9 @@ class Ui_MainWindow(object):
         self.closeWindow.setText("")
         self.dashboard_btn.setText(QCoreApplication.translate("MainWindow", u"Carte", None))
         self.projects_btn.setText(QCoreApplication.translate("MainWindow", u"Liste", None))
-        self.reports_btn.setText(QCoreApplication.translate("MainWindow", u"Reports", None))
+        self.reports_btn.setText(QCoreApplication.translate("MainWindow", u"Ajouter une préparation", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"More", None))
         self.settings_btns.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"REPORTS", None))
+        self.donatebtn.setText(QCoreApplication.translate("MainWindow", u"Paye moi un café !", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"SETTINGS", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"PrepQ by VA SIM ^^", None))
