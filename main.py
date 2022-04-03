@@ -1,5 +1,6 @@
 import sys
 import os
+import warnings
 from ui_interface import *
 from Custom_Widgets.Widgets import *
 from maps import MapCreator
@@ -8,6 +9,8 @@ from PySide2 import QtGui
 
 myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+warnings.filterwarnings("ignore")
+
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self)

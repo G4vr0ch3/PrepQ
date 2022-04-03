@@ -23,7 +23,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_bc0e5358780e449f9910796c90c4c433 {
+                #map_1c3aad448065407ba8466b882f081e84 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -35,13 +35,13 @@
 </head>
 <body>    
     
-            <div class="folium-map" id="map_bc0e5358780e449f9910796c90c4c433" ></div>
+            <div class="folium-map" id="map_1c3aad448065407ba8466b882f081e84" ></div>
         
 </body>
 <script>    
     
-            var map_bc0e5358780e449f9910796c90c4c433 = L.map(
-                "map_bc0e5358780e449f9910796c90c4c433",
+            var map_1c3aad448065407ba8466b882f081e84 = L.map(
+                "map_1c3aad448065407ba8466b882f081e84",
                 {
                     center: [48.3, -4.9],
                     crs: L.CRS.EPSG3857,
@@ -55,83 +55,98 @@
 
         
     
-            var tile_layer_cfaef894469e4f56b04445536b42e892 = L.tileLayer(
+            var tile_layer_3e29903ad3854e438990a82674c350c7 = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_bc0e5358780e449f9910796c90c4c433);
+            ).addTo(map_1c3aad448065407ba8466b882f081e84);
         
     
+        function geo_json_99b527d5e81e4955a0e040d98c110954_styler(feature) {
+            switch(feature.id) {
+                case "1": 
+                    return {"color": "#31F3C2", "fillColor": "#31F3C2", "fillOpacity": 0.3, "interactive": true, "opacity": 1, "weight": 3};
+                case "2": 
+                    return {"color": "#EEC3D8", "fillColor": "#EEC3D8", "fillOpacity": 0.3, "interactive": true, "opacity": 1, "weight": 3};
+                case "3": 
+                    return {"color": "#C07BD3", "fillColor": "#C07BD3", "fillOpacity": 0.3, "interactive": true, "opacity": 1, "weight": 3};
+                case "4": 
+                    return {"color": "#44371E", "fillColor": "#44371E", "fillOpacity": 0.3, "interactive": true, "opacity": 1, "weight": 3};
+                default:
+                    return {"color": "#F14ECC", "fillColor": "#F14ECC", "fillOpacity": 0.3, "interactive": true, "opacity": 1, "weight": 3};
+            }
+        }
 
-        function geo_json_22517267473e454492474115af7be757_onEachFeature(feature, layer) {
+        function geo_json_99b527d5e81e4955a0e040d98c110954_onEachFeature(feature, layer) {
             layer.on({
             });
         };
-        var geo_json_22517267473e454492474115af7be757 = L.geoJson(null, {
-                onEachFeature: geo_json_22517267473e454492474115af7be757_onEachFeature,
+        var geo_json_99b527d5e81e4955a0e040d98c110954 = L.geoJson(null, {
+                onEachFeature: geo_json_99b527d5e81e4955a0e040d98c110954_onEachFeature,
             
+                style: geo_json_99b527d5e81e4955a0e040d98c110954_styler,
         });
 
-        function geo_json_22517267473e454492474115af7be757_add (data) {
-            geo_json_22517267473e454492474115af7be757
+        function geo_json_99b527d5e81e4955a0e040d98c110954_add (data) {
+            geo_json_99b527d5e81e4955a0e040d98c110954
                 .addData(data)
-                .addTo(map_bc0e5358780e449f9910796c90c4c433);
+                .addTo(map_1c3aad448065407ba8466b882f081e84);
         }
-            geo_json_22517267473e454492474115af7be757_add({"features": [{"geometry": {"coordinates": [[[-4.532142, 48.341484], [-4.533467, 48.341954], [-4.540131, 48.340399], [-4.541279, 48.340813], [-4.548478, 48.338716], [-4.555072, 48.338413], [-4.564863, 48.331232], [-4.571046, 48.33032], [-4.570962, 48.327296], [-4.57859, 48.324849], [-4.580544, 48.319566], [-4.614191, 48.337483], [-4.610811, 48.338717], [-4.608676, 48.338068], [-4.577703, 48.349205], [-4.572141, 48.349224], [-4.569999, 48.351566], [-4.566759, 48.352029], [-4.567038, 48.354874], [-4.56383, 48.356393], [-4.56074, 48.356258], [-4.558626, 48.354347], [-4.554101, 48.361671], [-4.550126, 48.361999], [-4.537711, 48.357184], [-4.53357, 48.357904]]], "type": "Polygon"}, "id": "GB", "properties": {"infos": "NAVRES du Goulet de Brest, passes en entr\u00c3\u00a9es/sorties.", "name": "Goulet de Brest"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-4.845406491891601, 48.325510726410364], [-4.778930317987753, 48.324446798147854], [-4.792014970126544, 48.362023645416], [-4.7955378782819045, 48.37155551952714], [-4.7979728293142125, 48.39631594725119], [-4.840691531958303, 48.40120117440112], [-4.835781616840316, 48.356099654591816], [-4.839806346092392, 48.3309778951931]]], "type": "Polygon"}, "id": "CF", "properties": {"infos": "NAVRES du Chenal du Four, sens Nord/Sud et Sud/Nord.", "name": "Chenal du Four"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-4.716995017532506, 48.06130625841631], [-4.71553509169561, 48.06007411167564], [-4.71391504793349, 48.059048669066634], [-4.715234694662884, 48.057858307215994], [-4.714054524133989, 48.05624956065619], [-4.713352388374013, 48.05590536259392], [-4.71203274164462, 48.05607747133258], [-4.712343877865371, 48.05478664176963], [-4.714425271893846, 48.053725268775], [-4.713827414655855, 48.05276678321758], [-4.707338418680743, 48.049745951052635], [-4.709711185876163, 48.043986916668935], [-4.7332995437332235, 48.041628320474075], [-4.740798362371092, 48.04064837267143], [-4.7404915931875955, 48.03948608475935], [-4.737543733145491, 48.03939675756725], [-4.727550249310491, 48.033518811839436], [-4.757287798143168, 48.01685557429558], [-4.8299244354280475, 48.01685557429558], [-4.832822655369589, 48.03163569265656], [-4.832801236712817, 48.0330940446491], [-4.8362281959994435, 48.03426648386614], [-4.83845970378058, 48.03181498995298], [-4.840691211561715, 48.0326676967162], [-4.848581185502157, 48.03245452134823], [-4.848899972328034, 48.0379967943061], [-4.844118169939887, 48.040767707231794], [-4.838163054038563, 48.05669671951234], [-4.838119977426026, 48.06718073001598], [-4.716995017532506, 48.06130625841631]]], "type": "Polygon"}, "id": "RZ", "properties": {"infos": "NAVRES du Chenal du Four, sens Nord/Sud et Sud/Nord.", "name": "Raz de Sein"}, "type": "Feature"}], "type": "FeatureCollection"});
+            geo_json_99b527d5e81e4955a0e040d98c110954_add({"bbox": [NaN, NaN, NaN, NaN], "features": [{"bbox": [-4.614191, 48.319566, -4.532142, 48.361999], "geometry": {"coordinates": [[[-4.532142, 48.341484], [-4.533467, 48.341954], [-4.540131, 48.340399], [-4.541279, 48.340813], [-4.548478, 48.338716], [-4.555072, 48.338413], [-4.564863, 48.331232], [-4.571046, 48.33032], [-4.570962, 48.327296], [-4.57859, 48.324849], [-4.580544, 48.319566], [-4.614191, 48.337483], [-4.610811, 48.338717], [-4.608676, 48.338068], [-4.577703, 48.349205], [-4.572141, 48.349224], [-4.569999, 48.351566], [-4.566759, 48.352029], [-4.567038, 48.354874], [-4.56383, 48.356393], [-4.56074, 48.356258], [-4.558626, 48.354347], [-4.554101, 48.361671], [-4.550126, 48.361999], [-4.537711, 48.357184], [-4.53357, 48.357904], [-4.532142, 48.341484]]], "type": "Polygon"}, "id": "0", "properties": {"color": "#F14ECC", "id": "GB", "infos": "NAVRES du Goulet de Brest, passes en entr\u00e9e/sortie.", "name": "Goulet de Brest"}, "type": "Feature"}, {"bbox": [-4.845406491891601, 48.324446798147854, -4.778930317987753, 48.40120117440112], "geometry": {"coordinates": [[[-4.845406491891601, 48.325510726410364], [-4.778930317987753, 48.324446798147854], [-4.792014970126544, 48.362023645416], [-4.7955378782819045, 48.37155551952714], [-4.7979728293142125, 48.39631594725119], [-4.840691531958303, 48.40120117440112], [-4.835781616840316, 48.356099654591816], [-4.839806346092392, 48.3309778951931], [-4.845406491891601, 48.325510726410364]]], "type": "Polygon"}, "id": "1", "properties": {"color": "#31F3C2", "id": "CF", "infos": "NAVRES du Chenal du Four, sens Nord/Sud et Sud/Nord.", "name": "Chenal du Four"}, "type": "Feature"}, {"bbox": [-4.848899972328034, 48.01685557429558, -4.707338418680743, 48.06718073001598], "geometry": {"coordinates": [[[-4.716995017532506, 48.06130625841631], [-4.71553509169561, 48.06007411167564], [-4.71391504793349, 48.059048669066634], [-4.715234694662884, 48.057858307215994], [-4.714054524133989, 48.05624956065619], [-4.713352388374013, 48.05590536259392], [-4.71203274164462, 48.05607747133258], [-4.712343877865371, 48.05478664176963], [-4.714425271893846, 48.053725268775], [-4.713827414655855, 48.05276678321758], [-4.707338418680743, 48.049745951052635], [-4.709711185876163, 48.043986916668935], [-4.7332995437332235, 48.041628320474075], [-4.740798362371092, 48.04064837267143], [-4.7404915931875955, 48.03948608475935], [-4.737543733145491, 48.03939675756725], [-4.727550249310491, 48.033518811839436], [-4.757287798143168, 48.01685557429558], [-4.8299244354280475, 48.01685557429558], [-4.832822655369589, 48.03163569265656], [-4.832801236712817, 48.0330940446491], [-4.8362281959994435, 48.03426648386614], [-4.83845970378058, 48.03181498995298], [-4.840691211561715, 48.0326676967162], [-4.848581185502157, 48.03245452134823], [-4.848899972328034, 48.0379967943061], [-4.844118169939887, 48.040767707231794], [-4.838163054038563, 48.05669671951234], [-4.838119977426026, 48.06718073001598], [-4.716995017532506, 48.06130625841631]]], "type": "Polygon"}, "id": "2", "properties": {"color": "#EEC3D8", "id": "RZ", "infos": "NAVRES du Chenal du Four, sens Nord/Sud et Sud/Nord.", "name": "Raz de Sein"}, "type": "Feature"}, {"bbox": null, "geometry": null, "id": "3", "properties": {"color": "#C07BD3", "id": "NN", "infos": "Super Nav - Ajout\u00e9e localement", "name": "Nouvelle Nav"}, "type": "Feature"}, {"bbox": null, "geometry": null, "id": "4", "properties": {"color": "#44371E", "id": "T", "infos": "Test - Ajout\u00e9e localement", "name": "Test"}, "type": "Feature"}], "type": "FeatureCollection"});
 
         
     
-            var marker_f41f95b693394c1088eb8cc42f3174f3 = L.marker(
+            var marker_c1aaa89f0a7c4715abf3798081d96a7d = L.marker(
                 [48.34178879997596, -4.5686087418455195],
                 {}
-            ).addTo(map_bc0e5358780e449f9910796c90c4c433);
+            ).addTo(map_1c3aad448065407ba8466b882f081e84);
         
     
-        var popup_a311fe8e7daa462ba73e8575826761df = L.popup({"maxWidth": "100%"});
+        var popup_ea11186b63d9452a83aa6bb5bc2a692e = L.popup({"maxWidth": "100%"});
 
         
-            var html_ac3e2e7b3dd749558b2f72d515e3bc4d = $(`<div id="html_ac3e2e7b3dd749558b2f72d515e3bc4d" style="width: 100.0%; height: 100.0%;"><p>NAVRES du Goulet de Brest, passes en entrées/sorties.</p><a href="GB.html"> <button type="button" class="btn btn-primary">Goulet de Brest</button></a></div>`)[0];
-            popup_a311fe8e7daa462ba73e8575826761df.setContent(html_ac3e2e7b3dd749558b2f72d515e3bc4d);
+            var html_d01d7ba9054a47dbb3d1774584b9e57c = $(`<div id="html_d01d7ba9054a47dbb3d1774584b9e57c" style="width: 100.0%; height: 100.0%;"><p>NAVRES du Goulet de Brest, passes en entrée/sortie.</p><a href="GB.html"> <button type="button" class="btn btn-primary">Goulet de Brest</button></a></div>`)[0];
+            popup_ea11186b63d9452a83aa6bb5bc2a692e.setContent(html_d01d7ba9054a47dbb3d1774584b9e57c);
         
 
-        marker_f41f95b693394c1088eb8cc42f3174f3.bindPopup(popup_a311fe8e7daa462ba73e8575826761df)
+        marker_c1aaa89f0a7c4715abf3798081d96a7d.bindPopup(popup_ea11186b63d9452a83aa6bb5bc2a692e)
         ;
 
         
     
     
-            var marker_a515ebb16a2049219222116b9bdb4c40 = L.marker(
+            var marker_3e540b15fee24c03b413dae06dd57272 = L.marker(
                 [48.35915532592553, -4.8143477552348015],
                 {}
-            ).addTo(map_bc0e5358780e449f9910796c90c4c433);
+            ).addTo(map_1c3aad448065407ba8466b882f081e84);
         
     
-        var popup_e7f8b9009caf414c8b366650254b16a4 = L.popup({"maxWidth": "100%"});
+        var popup_e3011742f3014b49a5f4ea6e5ae5438f = L.popup({"maxWidth": "100%"});
 
         
-            var html_3f096bf6e6b34ffa89b8b8f9e004e031 = $(`<div id="html_3f096bf6e6b34ffa89b8b8f9e004e031" style="width: 100.0%; height: 100.0%;"><p>NAVRES du Chenal du Four, sens Nord/Sud et Sud/Nord.</p><a href="CF.html"> <button type="button" class="btn btn-primary">Chenal du Four</button></a></div>`)[0];
-            popup_e7f8b9009caf414c8b366650254b16a4.setContent(html_3f096bf6e6b34ffa89b8b8f9e004e031);
+            var html_6d43fe200dc44d7ca1fdbfbe611c68a2 = $(`<div id="html_6d43fe200dc44d7ca1fdbfbe611c68a2" style="width: 100.0%; height: 100.0%;"><p>NAVRES du Chenal du Four, sens Nord/Sud et Sud/Nord.</p><a href="CF.html"> <button type="button" class="btn btn-primary">Chenal du Four</button></a></div>`)[0];
+            popup_e3011742f3014b49a5f4ea6e5ae5438f.setContent(html_6d43fe200dc44d7ca1fdbfbe611c68a2);
         
 
-        marker_a515ebb16a2049219222116b9bdb4c40.bindPopup(popup_e7f8b9009caf414c8b366650254b16a4)
+        marker_3e540b15fee24c03b413dae06dd57272.bindPopup(popup_e3011742f3014b49a5f4ea6e5ae5438f)
         ;
 
         
     
     
-            var marker_3454fbbbbaf4443b974d2532ec28cae2 = L.marker(
+            var marker_6320db6800d24fc69f67834ec4aecd4d = L.marker(
                 [48.04249669615488, -4.783415966560811],
                 {}
-            ).addTo(map_bc0e5358780e449f9910796c90c4c433);
+            ).addTo(map_1c3aad448065407ba8466b882f081e84);
         
     
-        var popup_2a26508752d04804a3003487d0024569 = L.popup({"maxWidth": "100%"});
+        var popup_0903a09c845c4946a3dbf803e7c16aca = L.popup({"maxWidth": "100%"});
 
         
-            var html_a2691839edd4489a89db5122a1d3b3d7 = $(`<div id="html_a2691839edd4489a89db5122a1d3b3d7" style="width: 100.0%; height: 100.0%;"><p>NAVRES du Chenal du Four, sens Nord/Sud et Sud/Nord.</p><a href="RZ.html"> <button type="button" class="btn btn-primary">Raz de Sein</button></a></div>`)[0];
-            popup_2a26508752d04804a3003487d0024569.setContent(html_a2691839edd4489a89db5122a1d3b3d7);
+            var html_856ab943c4914abeb6ec92b058e98b5b = $(`<div id="html_856ab943c4914abeb6ec92b058e98b5b" style="width: 100.0%; height: 100.0%;"><p>NAVRES du Chenal du Four, sens Nord/Sud et Sud/Nord.</p><a href="RZ.html"> <button type="button" class="btn btn-primary">Raz de Sein</button></a></div>`)[0];
+            popup_0903a09c845c4946a3dbf803e7c16aca.setContent(html_856ab943c4914abeb6ec92b058e98b5b);
         
 
-        marker_3454fbbbbaf4443b974d2532ec28cae2.bindPopup(popup_2a26508752d04804a3003487d0024569)
+        marker_6320db6800d24fc69f67834ec4aecd4d.bindPopup(popup_0903a09c845c4946a3dbf803e7c16aca)
         ;
 
         

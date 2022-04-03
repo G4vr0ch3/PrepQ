@@ -14,8 +14,12 @@ import os
 import webbrowser
 import PySide2
 import resources_rc
+import warnings
+
+import submit_function as sf
 import geopandas as gpd
 
+warnings.filterwarnings("ignore")
 
 
 font = QFont()
@@ -35,6 +39,50 @@ font2.setPointSize(20)
 font2.setBold(True)
 font2.setWeight(75)
 
+font3 = QFont()
+font3.setFamily(u"URW Gothic")
+font3.setPointSize(16)
+font3.setBold(True)
+font3.setWeight(75)
+
+def namechanged(text):
+    navname = text
+
+def infoschanged(text):
+    navinfos = text
+
+def zonechanged(text):
+    navzone = text
+
+def testname(nme):
+
+    try:
+        df = gpd.read_file("zones.json")
+        df.head(2)
+
+        for i in range(len(df)):
+            if (df["name"][i] == nme):
+                return True
+
+        return False
+
+    except:
+        try:
+            print("Trying old json file")
+            df = gpd.read_file("zones.json.old")
+            df.head(2)
+
+            for i in range(len(df)):
+                if (df["name"][i] == nme):
+                    return True
+            rfile = open("zones.json.old", "r")
+            file = open("zones.json", "w")
+            file.write(rfile.read())
+
+            return False
+
+        except:
+            print("Error loading json file.")
 
 def getid(item):
 
@@ -75,6 +123,164 @@ def getid(item):
         except:
             print("Error loading json file.")
 
+class dialog(QMainWindow):
+
+    def __init__(self, error="PrepQ à rencontré une erreur."):
+        super().__init__()
+        self.setStyleSheet(u"*{\n"
+        "background-color: transparent;\n"
+        "padding: 0;\n"
+        "margin: 0;\n"
+        "border: none;\n"
+        "color: #fff;\n"
+        "}\n"
+        "#centralwidget{\n"
+        "background-color: rgb(39, 43, 54);\n"
+        "}\n"
+        "#toggle_button_cont{\n"
+        "background-color: rgb(28, 37, 49);\n"
+        "}\n"
+        "#left_menu_main_container > QWidget{\n"
+        "border-bottom: 2px solid rgb(28, 37, 49);\n"
+        "}\n"
+        "#left_menu_main_container QPushButton{\n"
+        "padding: 10px 5px;\n"
+        "text-align: left;\n"
+        "}\n"
+        "QStackedWidget > QWidget{\n"
+        "background-color: rgb(20, 28, 39);\n"
+        "}\n"
+        "")
+        self.resize(300, 150)
+        self.setWindowTitle("PrepQ - Error")
+        self.setWindowIcon(PySide2.QtGui.QIcon("icons/icon.jpg"))
+        self.centralwidget_2 = QWidget(self)
+        self.centralwidget_2.setObjectName(u"centralwidget_2")
+        self.verticalLayout_15 = QVBoxLayout(self.centralwidget_2)
+        self.verticalLayout_15.setSpacing(0)
+        self.verticalLayout_15.setObjectName(u"verticalLayout_15")
+        self.verticalLayout_15.setContentsMargins(10, 10, 10, 10)
+        self.errorlabel = QLabel(self)
+        self.errorlabel.setText(error)
+        self.errorlabel.setFont(font3)
+        self.errorlabel.adjustSize()
+        self.errorlabel.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_15.addWidget(self.errorlabel)
+        self.setCentralWidget(self.centralwidget_2)
+        self.centralwidget_2.setLayout(self.verticalLayout_15)
+
+
+class imported(QMainWindow):
+
+    def __init__(self, error="PrepQ à rencontré une erreur."):
+        super().__init__()
+        self.setStyleSheet(u"*{\n"
+        "background-color: transparent;\n"
+        "padding: 0;\n"
+        "margin: 0;\n"
+        "border: none;\n"
+        "color: #fff;\n"
+        "}\n"
+        "#centralwidget{\n"
+        "background-color: rgb(39, 43, 54);\n"
+        "}\n"
+        "#toggle_button_cont{\n"
+        "background-color: rgb(28, 37, 49);\n"
+        "}\n"
+        "#left_menu_main_container > QWidget{\n"
+        "border-bottom: 2px solid rgb(28, 37, 49);\n"
+        "}\n"
+        "#left_menu_main_container QPushButton{\n"
+        "padding: 10px 5px;\n"
+        "text-align: left;\n"
+        "}\n"
+        "QStackedWidget > QWidget{\n"
+        "background-color: rgb(20, 28, 39);\n"
+        "}\n"
+        "")
+        self.resize(300, 150)
+        self.setWindowTitle("PrepQ - Importation réussie")
+        self.setWindowIcon(PySide2.QtGui.QIcon("icons/icon.jpg"))
+        self.centralwidget_3 = QWidget(self)
+        self.centralwidget_3.setObjectName(u"centralwidget_3")
+        self.verticalLayout_16 = QVBoxLayout(self.centralwidget_3)
+        self.verticalLayout_16.setSpacing(0)
+        self.verticalLayout_16.setObjectName(u"verticalLayout_15")
+        self.verticalLayout_16.setContentsMargins(10, 10, 10, 10)
+        self.successlabel = QLabel(self)
+        self.successlabel.setText(error)
+        self.successlabel.setFont(font3)
+        self.successlabel.adjustSize()
+        self.successlabel.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_16.addWidget(self.successlabel)
+        self.setCentralWidget(self.centralwidget_3)
+        self.centralwidget_3.setLayout(self.verticalLayout_16)
+
+
+class browsebtn(QPushButton):
+
+    filename = ""
+
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"returnButton")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/icons/paperclip.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.setIcon(icon1)
+        self.setIconSize(QSize(24, 24))
+        self.setFont(font1)
+
+    def Clicked(self):
+        fname = QFileDialog.getOpenFileName(self, 'Open file', ':', 'Préparation (*.pdf, *.html)')
+        self.setText(fname[0])
+        self.filename = fname[0]
+
+
+class submitbtn(QPushButton):
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"submitbtn")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/icons/arrow-right.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.setIcon(icon1)
+        self.setIconSize(QSize(24, 24))
+        self.setFont(font1)
+        self.setText("Ajouter")
+        self.clicked.connect(self.Clicked)
+
+    def Clicked(self):
+        if (self.window().ui.browse.filename == ""):
+            self.window().ui.dial = dialog("Vous avez oublié d'ajouter une préparation.")
+            self.window().ui.dial.show()
+
+        elif ((self.window().ui.lineEdit_2.text() == '') or (self.window().ui.infos.toPlainText() == '')):
+            self.window().ui.dial = dialog("Vous n'avez pas renseigner toutes les informations nécessaires")
+            self.window().ui.dial.show()
+        elif (testname(self.window().ui.lineEdit_2.text())):
+            self.window().ui.dial = dialog("Ce nom de navigation est déjà pris.")
+            self.window().ui.dial.show()
+        else:
+            if (self.window().ui.check.isChecked()):
+                self.window().ui.dial = dialog("Cette fonction n'est pas disponnible pour le moment.\nNos équipes font de leur mieux pour vous apporter cette fonctionnalité au plus vite !")
+                self.window().ui.dial.show()
+
+            try:
+                sf.wrt(self.window().ui.lineEdit_2.text(), self.window().ui.infos.toPlainText(), self.window().ui.browse.filename, self.window().ui.geom.toPlainText())
+                self.window().ui.dial = imported("Votre préparation de quart à été ajoutée à votre liste de préparations !")
+                self.window().ui.dial.show()
+                self.window().ui.navlist.rsetlist()
+                self.window().ui.lineEdit_2.setText("")
+                self.window().ui.infos.setPlainText("")
+                self.window().ui.geom.setPlainText("")
+                self.window().ui.browse.setText("Joindre la préparation")
+                self.ui.browse.filename = ""
+
+            except:
+                self.window().ui.dial = dialog("Echec de l'importation.\nVérifiez les informations renseignées et réessayez.")
+                self.window().ui.dial.show()
+
 
 
 class donatebtn(QPushButton):
@@ -103,11 +309,7 @@ class returnBtn(QPushButton):
 
 class CustList(QListWidget):
 
-    def __init__(self):
-        super().__init__()
-        self.setObjectName(u"navlist")
-        self.setFont(font2)
-
+    def setlist(self):
         try:
             df = gpd.read_file("zones.json")
             df.head(2)
@@ -132,6 +334,17 @@ class CustList(QListWidget):
 
             except:
                 print("Error loading json file.")
+
+    def rsetlist(self):
+        self.clear()
+        self.setlist()
+
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"navlist")
+        self.setFont(font2)
+
+        self.setlist()
 
         self.itemClicked.connect(self.Clicked)
 
@@ -169,29 +382,29 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(801, 432)
         MainWindow.setStyleSheet(u"*{\n"
-"background-color: transparent;\n"
-"padding: 0;\n"
-"margin: 0;\n"
-"border: none;\n"
-"color: #fff;\n"
-"}\n"
-"#centralwidget{\n"
-"background-color: rgb(39, 43, 54);\n"
-"}\n"
-"#toggle_button_cont{\n"
-"background-color: rgb(28, 37, 49);\n"
-"}\n"
-"#left_menu_main_container > QWidget{\n"
-"border-bottom: 2px solid rgb(28, 37, 49);\n"
-"}\n"
-"#left_menu_main_container QPushButton{\n"
-"padding: 10px 5px;\n"
-"text-align: left;\n"
-"}\n"
-"QStackedWidget > QWidget{\n"
-"background-color: rgb(20, 28, 39);\n"
-"}\n"
-"")
+        "background-color: transparent;\n"
+        "padding: 0;\n"
+        "margin: 0;\n"
+        "border: none;\n"
+        "color: #fff;\n"
+        "}\n"
+        "#centralwidget{\n"
+        "background-color: rgb(39, 43, 54);\n"
+        "}\n"
+        "#toggle_button_cont{\n"
+        "background-color: rgb(28, 37, 49);\n"
+        "}\n"
+        "#left_menu_main_container > QWidget{\n"
+        "border-bottom: 2px solid rgb(28, 37, 49);\n"
+        "}\n"
+        "#left_menu_main_container QPushButton{\n"
+        "padding: 10px 5px;\n"
+        "text-align: left;\n"
+        "}\n"
+        "QStackedWidget > QWidget{\n"
+        "background-color: rgb(20, 28, 39);\n"
+        "}\n"
+        "")
 
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -492,7 +705,68 @@ class Ui_MainWindow(object):
         self.verticalLayout_10 = QVBoxLayout(self.page_3)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
 
+        self.label_5 = QLabel(self.page_3)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setFont(font2)
+        self.label_5.setAlignment(Qt.AlignLeft)
+
+        self.lineEdit_2 = QLineEdit(self.page_3)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+        self.lineEdit_2.setFont(font)
+        self.lineEdit_2.setStyleSheet("border: 1px solid white;")
+        self.lineEdit_2.setAlignment(Qt.AlignTop)
+        self.lineEdit_2.textChanged.connect(namechanged)
+
+        self.label_9 = QLabel(self.page_3)
+        self.label_9.setObjectName(u"label_9")
+        self.label_9.setFont(font2)
+        self.label_9.setAlignment(Qt.AlignLeft)
+
+        self.infos = QPlainTextEdit(self.page_3)
+        self.infos.setObjectName(u"infos")
+        self.infos.setFont(font)
+        self.infos.setStyleSheet("border: 1px solid white;")
+
+        self.browse = browsebtn()
+        self.browse.setText("Joindre la préparation")
+        self.browse.clicked.connect(self.browse.Clicked)
+
+        self.label_10 = QLabel(self.page_3)
+        self.label_10.setObjectName(u"label_10")
+        self.label_10.setFont(font2)
+        self.label_10.setAlignment(Qt.AlignLeft)
+
+        self.geom = QPlainTextEdit(self.page_3)
+        self.geom.setObjectName(u"geom")
+        self.geom.setStyleSheet("border: 1px solid white;")
+        self.geom.setFont(font)
+
+        self.check = QCheckBox("Partager", self.page_3)
+        self.check.setFont(font)
+
+        self.submit = submitbtn()
+
+        self.verticalLayout_10.addWidget(self.label_5)
+        self.verticalLayout_10.addWidget(self.lineEdit_2)
+        self.verticalLayout_10.addWidget(self.label_9)
+        self.verticalLayout_10.addWidget(self.infos)
+        self.verticalLayout_10.addWidget(self.browse)
+        self.verticalLayout_10.addWidget(self.label_10)
+        self.verticalLayout_10.addWidget(self.geom)
+
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.addStretch(1)
+        self.horizontalLayout_9.addWidget(self.check)
+        self.horizontalLayout_9.addWidget(self.submit)
+
+        self.verticalLayout_10.addLayout(self.horizontalLayout_9)
+
         self.stackedWidget.addWidget(self.page_3)
+
+
+
+
+
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
         self.verticalLayout_11 = QVBoxLayout(self.page_4)
@@ -582,3 +856,9 @@ class Ui_MainWindow(object):
         self.donatebtn.setText(QCoreApplication.translate("MainWindow", u"Paye moi un café !", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"SETTINGS", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"PrepQ by VA SIM ^^", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Navigation :", None))
+        self.lineEdit_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Nom", None))
+        self.label_9.setText(QCoreApplication.translate("MainWindow", u"Informations :", None))
+        self.infos.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Donnez quelques informations sur la navigation concernée et sur le contenu de votre préparation", None))
+        self.label_10.setText(QCoreApplication.translate("MainWindow", u"Zone (optionnel) :", None))
+        self.geom.setPlaceholderText(QCoreApplication.translate("MainWindow", u'Ecrivez sous la forme "[longitude latitude], [longitude latitude], [longitude latitude], ..."', None))
