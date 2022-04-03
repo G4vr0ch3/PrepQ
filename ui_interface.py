@@ -9,6 +9,9 @@ from Custom_Widgets.Widgets import QCustomStackedWidget
 
 from PyQt5 import QtCore
 from PyQt5 import QtGui
+from PyQt5.QtWebEngineWidgets import QWebEngineSettings
+
+from os.path import exists
 
 import os
 import webbrowser
@@ -57,7 +60,7 @@ def zonechanged(text):
 def testname(nme):
 
     try:
-        df = gpd.read_file("zones.json")
+        df = gpd.read_file("zones/zones.json")
         df.head(2)
 
         for i in range(len(df)):
@@ -69,14 +72,14 @@ def testname(nme):
     except:
         try:
             print("Trying old json file")
-            df = gpd.read_file("zones.json.old")
+            df = gpd.read_file("zones/zones.json.old")
             df.head(2)
 
             for i in range(len(df)):
                 if (df["name"][i] == nme):
                     return True
-            rfile = open("zones.json.old", "r")
-            file = open("zones.json", "w")
+            rfile = open("zones/zones.json.old", "r")
+            file = open("zones/zones.json", "w")
             file.write(rfile.read())
 
             return False
@@ -87,7 +90,7 @@ def testname(nme):
 def getid(item):
 
     try:
-        df = gpd.read_file("zones.json")
+        df = gpd.read_file("zones/zones.json")
         df.head(2)
 
         nme = item.text()
@@ -103,7 +106,7 @@ def getid(item):
     except:
         try:
             print("Trying old json file")
-            df = gpd.read_file("zones.json.old")
+            df = gpd.read_file("zones/zones.json.old")
             df.head(2)
 
             nme = item.text()
@@ -114,8 +117,8 @@ def getid(item):
                 if (df["name"][i] == nme):
                     return df["id"][i]
 
-            rfile = open("zones.json.old", "r")
-            file = open("zones.json", "w")
+            rfile = open("zones/zones.json.old", "r")
+            file = open("zones/zones.json", "w")
             file.write(rfile.read())
 
             return "notfound"
@@ -233,7 +236,7 @@ class browsebtn(QPushButton):
         self.setFont(font1)
 
     def Clicked(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open file', ':', 'Préparation (*.pdf, *.html)')
+        fname = QFileDialog.getOpenFileName(self, 'Open file', ':', 'Préparation (*.pdf *.html)')
         self.setText(fname[0])
         self.filename = fname[0]
 
@@ -266,21 +269,20 @@ class submitbtn(QPushButton):
                 self.window().ui.dial = dialog("Cette fonction n'est pas disponnible pour le moment.\nNos équipes font de leur mieux pour vous apporter cette fonctionnalité au plus vite !")
                 self.window().ui.dial.show()
 
-            try:
-                sf.wrt(self.window().ui.lineEdit_2.text(), self.window().ui.infos.toPlainText(), self.window().ui.browse.filename, self.window().ui.geom.toPlainText())
-                self.window().ui.dial = imported("Votre préparation de quart à été ajoutée à votre liste de préparations !")
-                self.window().ui.dial.show()
-                self.window().ui.navlist.rsetlist()
-                self.window().ui.lineEdit_2.setText("")
-                self.window().ui.infos.setPlainText("")
-                self.window().ui.geom.setPlainText("")
-                self.window().ui.browse.setText("Joindre la préparation")
-                self.ui.browse.filename = ""
+#            try:
+            sf.wrt(self.window().ui.lineEdit_2.text(), self.window().ui.infos.toPlainText(), self.window().ui.browse.filename, self.window().ui.geom.toPlainText())
+            self.window().ui.dial = imported("Votre préparation de quart à été ajoutée à votre liste de préparations !")
+            self.window().ui.dial.show()
+            self.window().ui.navlist.rsetlist()
+            self.window().ui.lineEdit_2.setText("")
+            self.window().ui.infos.setPlainText("")
+            self.window().ui.geom.setPlainText("")
+            self.window().ui.browse.setText("Joindre la préparation")
+            self.window().ui.browse.filename = ""
 
-            except:
-                self.window().ui.dial = dialog("Echec de l'importation.\nVérifiez les informations renseignées et réessayez.")
-                self.window().ui.dial.show()
-
+#            except:
+#                self.window().ui.dial = dialog("Echec de l'importation.\nVérifiez les informations renseignées et réessayez.")
+#                self.window().ui.dial.show()
 
 
 class donatebtn(QPushButton):
@@ -311,7 +313,7 @@ class CustList(QListWidget):
 
     def setlist(self):
         try:
-            df = gpd.read_file("zones.json")
+            df = gpd.read_file("zones/zones.json")
             df.head(2)
 
             for i in range(len(df)):
@@ -321,15 +323,15 @@ class CustList(QListWidget):
         except:
             try:
                 print("Trying old json file")
-                df = gpd.read_file("zones.json.old")
+                df = gpd.read_file("zones/zones.json.old")
                 df.head(2)
 
                 for i in range(len(df)):
                     item = df["name"][i] + " - " + df["infos"][i]
                     self.addItem(item)
 
-                rfile = open("zones.json.old", "r")
-                file = open("zones.json", "w")
+                rfile = open("zones/zones.json.old", "r")
+                file = open("zones/zones.json", "w")
                 file.write(rfile.read())
 
             except:
@@ -351,7 +353,7 @@ class CustList(QListWidget):
 
     def Clicked(self, item):
         self.window().ui.verticalLayout_9.removeWidget(self.window().ui.navlist)
-        self.window().ui.render = self.window().uirender = QWebEngineView()
+        self.window().ui.render = QWebEngineView()
         self.window().ui.render.setObjectName(u"render")
         sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy2.setHorizontalStretch(0)
@@ -359,8 +361,17 @@ class CustList(QListWidget):
         sizePolicy2.setHeightForWidth(self.window().ui.render.sizePolicy().hasHeightForWidth())
         self.window().ui.render.setSizePolicy(sizePolicy2)
         self.window().ui.render.setMinimumSize(QSize(0, 0))
+        self.window().ui.render.page().settings().setAttribute(PySide2.QtWebEngineWidgets.QWebEngineSettings.PluginsEnabled, True)
         id = getid(item)
-        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "{}.html".format(id)))
+
+        if (exists("prepa/"+id+".html")):
+            fle = id+".html"
+        elif (exists("prepa/"+id+".pdf")):
+            fle = id+".pdf"
+        else:
+            fle = ""
+
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), fle))
         url = QUrl.fromLocalFile(file_path)
         self.window().ui.render.setUrl(QUrl(url))
         self.window().ui.render.load(QUrl(url))
@@ -667,7 +678,6 @@ class Ui_MainWindow(object):
         self.webEngineView.setSizePolicy(sizePolicy2)
         self.webEngineView.setMinimumSize(QSize(0, 0))
         self.webEngineView.setUrl(QUrl(u"about:blank"))
-
 
 
         file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))

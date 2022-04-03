@@ -24,6 +24,8 @@ class MainWindow(QMainWindow):
         local_url = QUrl.fromLocalFile(file_path)
 
         self.ui.webEngineView.load(QUrl(local_url))
+        self.ui.webEngineView.page().settings().setAttribute(PySide2.QtWebEngineWidgets.QWebEngineSettings.PluginsEnabled, True)
+
         self.showMaximized()
 
 

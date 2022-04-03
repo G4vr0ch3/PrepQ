@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 
-
+from os.path import exists
 
 warnings.filterwarnings("ignore")
 
@@ -15,7 +15,7 @@ def create(map):
 	try:
 
 
-		area = gpd.read_file("zones.json")
+		area = gpd.read_file("zones/zones.json")
 		area.head(2)
 
 		for x in area.index:
@@ -37,7 +37,13 @@ def create(map):
 		folium.GeoJson(data=area, style_function=style).add_to(map)
 
 		for i in range(len(area)):
-			html = """<p>{}</p><a href="{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+			if (exists("prepa/"+area["id"][i]+".html")):
+				html = """<p>{}</p><a href="{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+			elif (exists("prepa/"+area["id"][i]+".pdf")):
+				html = """<p>{}</p><a href="{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+			else:
+				html = """<p>Pas de préparation de quart disponnible.</p>"""
+
 			try:
 				lon = area["geometry"][i].centroid.x
 				lat = area["geometry"][i].centroid.y
@@ -49,7 +55,7 @@ def create(map):
 		try:
 			print("Trying old json file")
 
-			area = gpd.read_file("zones.json.old")
+			area = gpd.read_file("zones/zones.json.old")
 			area.head(2)
 
 			for x in area.index:
@@ -68,7 +74,15 @@ def create(map):
 			folium.GeoJson(data=area, style_function=style).add_to(map)
 
 			for i in range(len(area)):
-				html = """<p>{}</p><a href="{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+				if (exists("prepa/"+area["id"][i]+".html")):
+					html = """<p>{}</p><a href="{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+					print(html)
+				elif (exists("prepa/"+area["id"][i]+".pdf")):
+					html = """<p>{}</p><a href="{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+					print(html)
+				else:
+					html = """<p>Pas de préparation de quart disponnible.</p>"""
+
 				try:
 					lon = area["geometry"][i].centroid.x
 					lat = area["geometry"][i].centroid.y
@@ -76,8 +90,8 @@ def create(map):
 				except:
 					print("No marker available")
 
-			rfile = open("zones.json.old", "r")
-			file = open("zones.json", "w")
+			rfile = open("zones/zones.json.old", "r")
+			file = open("zones/zones.json", "w")
 			file.write(rfile.read())
 
 		except:
