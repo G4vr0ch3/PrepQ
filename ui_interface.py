@@ -285,6 +285,7 @@ class quitbtn(QPushButton):
         self.hide()
         self.window().ui.playagainbtn.hide()
         self.window().ui.label_11.hide()
+        self.window().ui.label_12.hide()
         self.window().ui.label_8.click_counter = 0
         self.window().ui.label_8.show()
         self.window().ui.infoTitle.show()
@@ -306,6 +307,7 @@ class playbtn(QPushButton):
         self.hide()
         self.window().ui.quitbutton.hide()
         self.window().ui.label_11.hide()
+        self.window().ui.label_12.hide()
 
         file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "icons/game/game.html"))
         local_url = QUrl.fromLocalFile(file_path)
