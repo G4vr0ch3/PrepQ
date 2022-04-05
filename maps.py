@@ -31,16 +31,16 @@ def create(map):
 					'weight': 3,
 					'opacity':1,
         			'fillOpacity': 0.3,
-        			'interactive':True
+        			'interactive': False
 				}
 
 		folium.GeoJson(data=area, style_function=style).add_to(map)
 
 		for i in range(len(area)):
 			if (exists("prepa/"+area["id"][i]+".html")):
-				html = """<p>{}</p><a href="{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+				html = """<p>{}</p><a href="prepa/{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
 			elif (exists("prepa/"+area["id"][i]+".pdf")):
-				html = """<p>{}</p><a href="{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+				html = """<p>{}</p><a href="prepa/{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
 			else:
 				html = """<p>Pas de préparation de quart disponnible.</p>"""
 
@@ -75,10 +75,10 @@ def create(map):
 
 			for i in range(len(area)):
 				if (exists("prepa/"+area["id"][i]+".html")):
-					html = """<p>{}</p><a href="{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+					html = """<p>{}</p><a href="prepa/{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
 					print(html)
 				elif (exists("prepa/"+area["id"][i]+".pdf")):
-					html = """<p>{}</p><a href="{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+					html = """<p>{}</p><a href="prepa/{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
 					print(html)
 				else:
 					html = """<p>Pas de préparation de quart disponnible.</p>"""
@@ -98,6 +98,14 @@ def create(map):
 			print("Error loading json file.")
 
 	data = io.BytesIO()
+
+def rsetmap():
+	mapNew = folium.Map(location=[48.3, -4.9], zoom_start=10)
+
+	create(mapNew)
+
+	mapNew.save('output.html')
+
 
 class MapCreator():
 	mapObj = folium.Map(location=[48.3, -4.9], zoom_start=10)

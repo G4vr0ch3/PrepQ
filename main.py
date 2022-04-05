@@ -1,10 +1,11 @@
 import sys
 import os
 import warnings
+import ctypes
+
 from ui_interface import *
 from Custom_Widgets.Widgets import *
 from maps import MapCreator
-import ctypes
 from PySide2 import QtGui
 
 myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string

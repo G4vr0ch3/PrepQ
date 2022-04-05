@@ -9,7 +9,7 @@ import geopandas as gpd
 def wrt (name, infos, docpath, geo=""):
     with open("zones/zones.json", "r", encoding='utf-8') as file:
         content = file.read()
-        old = open("zones/zones.json.old", "w")
+        old = open("zones/zones.json.old", "w", encoding='utf-8')
         old.write(content)
 
     tnm = ''

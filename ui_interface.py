@@ -13,6 +13,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineSettings
 
 from os.path import exists
 
+import maps
 import os
 import webbrowser
 import PySide2
@@ -125,6 +126,192 @@ def getid(item):
 
         except:
             print("Error loading json file.")
+
+
+class searchengine(QLineEdit):
+
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"lineEdit")
+        self.textChanged.connect(self.search)
+
+
+    def search(self):
+        self.setText("")
+
+#data = [["id", ["mots"]]]
+
+#query = self.text().split(" ")
+#for i in query:
+#   dt = []
+#   for j in range data:
+#       if i in j:
+#           dt.append(j)
+#   data = np.unique(dt)
+#
+#
+
+
+class easterbutton(QPushButton):
+
+    click_counter = 0
+
+    def Clicked(self):
+        self.click_counter += 1
+
+        if self.click_counter == 3:
+            self.hide()
+            self.window().ui.infoTitle.hide()
+            self.window().ui.infotodo.hide()
+            self.window().ui.infothanks.hide()
+
+            self.window().ui.egg = customEngineView()
+
+            file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "icons/game/game.html"))
+            local_url = QUrl.fromLocalFile(file_path)
+            self.window().ui.egg.load(QUrl(local_url))
+
+            self.window().ui.egg.page().settings().setAttribute(PySide2.QtWebEngineWidgets.QWebEngineSettings.PluginsEnabled, True)
+
+            self.window().ui.egg.titleChanged.connect(self.window().ui.egg.ChangedC)
+
+            self.window().ui.verticalLayout_13.addWidget(self.window().ui.egg)
+
+
+class printbtn(QPushButton):
+
+    title = ""
+
+    def __init__(self, rtitle=""):
+        super().__init__()
+        self.title = rtitle
+        self.setFont(font1)
+        self.setText("Imprimer")
+        icon12 = QIcon()
+        icon12.addFile(u":/icons/icons/printer.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.setIcon(icon12)
+        self.setIconSize(QSize(24, 24))
+
+    def printf(self):
+        link = os.path.dirname(os.path.abspath(__file__)) + '\prepa\\' + self.title
+        webbrowser.open(link)
+
+class customEngineView(QWebEngineView):
+    def ChangedA(self):
+
+        title = self.title()
+
+
+        if (title != 'output.html'):
+
+            self.window().ui.footer = QHBoxLayout()
+
+            self.window().ui.returnButton = returnBtn("Retour à la carte")
+            self.window().ui.returnButton.clicked.connect(self.window().ui.returnButton.returnB)
+            self.window().ui.footer.addWidget(self.window().ui.returnButton)
+
+            self.window().ui.print_btn = printbtn(title)
+            self.window().ui.print_btn.setObjectName(u"print_btn")
+            self.window().ui.footer.addWidget(self.window().ui.print_btn)
+            self.window().ui.print_btn.clicked.connect(self.window().ui.print_btn.printf)
+
+            self.window().ui.verticalLayout_14.addLayout(self.window().ui.footer)
+            self.window().ui.page.setLayout(self.window().ui.verticalLayout_14)
+
+    def ChangedB(self):
+
+        title = self.title()
+
+        self.window().ui.footer = QHBoxLayout()
+
+        self.window().ui.rtbtn = returnBtn("Retour à la liste")
+        self.window().ui.rtbtn.clicked.connect(self.window().ui.rtbtn.returnA)
+        self.window().ui.footer.addWidget(self.window().ui.rtbtn)
+
+        self.window().ui.prntbtn = printbtn(title)
+        self.window().ui.prntbtn.setObjectName(u"print_btn")
+        self.window().ui.footer.addWidget(self.window().ui.prntbtn)
+        self.window().ui.prntbtn.clicked.connect(self.window().ui.prntbtn.printf)
+
+        self.window().ui.verticalLayout_9.addLayout(self.window().ui.footer)
+        self.window().ui.page_2.setLayout(self.window().ui.verticalLayout_9)
+
+
+    def ChangedC(self):
+
+        title = self.title()
+
+        if title == "over":
+            self.window().ui.egg.hide()
+
+            self.window().ui.label_11 = QLabel()
+            self.window().ui.label_11.setFont(font2)
+            self.window().ui.label_11.setText("Game Over")
+            self.window().ui.label_11.setAlignment(Qt.AlignCenter)
+
+            self.window().ui.label_12 = QLabel()
+            self.window().ui.label_12.setFont(font)
+            self.window().ui.label_12.setText("Hope you liked my app ;)")
+            self.window().ui.label_12.setAlignment(Qt.AlignCenter)
+
+            self.window().ui.playagainbtn = playbtn()
+            self.window().ui.playagainbtn.clicked.connect(self.window().ui.playagainbtn.Clicked)
+
+            self.window().ui.quitbutton = quitbtn()
+            self.window().ui.quitbutton.clicked.connect(self.window().ui.quitbutton.Clicked)
+
+            self.window().ui.horizontalLayout_10 = QHBoxLayout()
+
+            self.window().ui.horizontalLayout_10.addWidget(self.window().ui.quitbutton, alignment=Qt.AlignCenter)
+            self.window().ui.horizontalLayout_10.addWidget(self.window().ui.playagainbtn, alignment=Qt.AlignCenter)
+
+            self.window().ui.verticalLayout_13.addWidget(self.window().ui.label_11)
+            self.window().ui.verticalLayout_13.addLayout(self.window().ui.horizontalLayout_10, alignment=Qt.AlignVCenter)
+            self.window().ui.verticalLayout_13.addWidget(self.window().ui.label_12)
+
+
+class quitbtn(QPushButton):
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"quitbtn")
+        self.setFont(font1)
+        self.setText("Quitter")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/icons/log-out.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.setIcon(icon1)
+        self.setIconSize(QSize(35, 35))
+
+    def Clicked(self):
+        self.hide()
+        self.window().ui.playagainbtn.hide()
+        self.window().ui.label_11.hide()
+        self.window().ui.label_8.click_counter = 0
+        self.window().ui.label_8.show()
+        self.window().ui.infoTitle.show()
+        self.window().ui.infotodo.show()
+        self.window().ui.infothanks.show()
+
+class playbtn(QPushButton):
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"playagainbtn")
+        self.setFont(font1)
+        self.setText("Recommencer")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/icons/repeat.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.setIcon(icon1)
+        self.setIconSize(QSize(35, 35))
+
+    def Clicked(self):
+        self.hide()
+        self.window().ui.quitbutton.hide()
+        self.window().ui.label_11.hide()
+
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "icons/game/game.html"))
+        local_url = QUrl.fromLocalFile(file_path)
+        self.window().ui.egg.load(QUrl(local_url))
+
+        self.window().ui.egg.show()
 
 class dialog(QMainWindow):
 
@@ -269,20 +456,24 @@ class submitbtn(QPushButton):
                 self.window().ui.dial = dialog("Cette fonction n'est pas disponnible pour le moment.\nNos équipes font de leur mieux pour vous apporter cette fonctionnalité au plus vite !")
                 self.window().ui.dial.show()
 
-#            try:
-            sf.wrt(self.window().ui.lineEdit_2.text(), self.window().ui.infos.toPlainText(), self.window().ui.browse.filename, self.window().ui.geom.toPlainText())
-            self.window().ui.dial = imported("Votre préparation de quart à été ajoutée à votre liste de préparations !")
-            self.window().ui.dial.show()
-            self.window().ui.navlist.rsetlist()
-            self.window().ui.lineEdit_2.setText("")
-            self.window().ui.infos.setPlainText("")
-            self.window().ui.geom.setPlainText("")
-            self.window().ui.browse.setText("Joindre la préparation")
-            self.window().ui.browse.filename = ""
+            try:
+                sf.wrt(self.window().ui.lineEdit_2.text(), self.window().ui.infos.toPlainText(), self.window().ui.browse.filename, self.window().ui.geom.toPlainText())
+                self.window().ui.dial = imported("Votre préparation de quart à été ajoutée à votre liste de préparations !")
+                self.window().ui.dial.show()
+                self.window().ui.navlist.rsetlist()
+                self.window().ui.lineEdit_2.setText("")
+                self.window().ui.infos.setPlainText("")
+                self.window().ui.geom.setPlainText("")
+                self.window().ui.browse.setText("Joindre la préparation")
+                self.window().ui.browse.filename = ""
+                maps.rsetmap()
+                file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
+                local_url = QUrl.fromLocalFile(file_path)
+                self.window().ui.webEngineView.load(QUrl(local_url))
 
-#            except:
-#                self.window().ui.dial = dialog("Echec de l'importation.\nVérifiez les informations renseignées et réessayez.")
-#                self.window().ui.dial.show()
+            except:
+                self.window().ui.dial = dialog("Echec de l'importation.\nVérifiez les informations renseignées et réessayez.")
+                self.window().ui.dial.show()
 
 
 class donatebtn(QPushButton):
@@ -290,7 +481,7 @@ class donatebtn(QPushButton):
         webbrowser.open("https://www.paypal.com/paypalme/AReppelin")
 
 class returnBtn(QPushButton):
-    def __init__(self):
+    def __init__(self, label = "Retour"):
         super().__init__()
         self.setObjectName(u"returnButton")
         icon1 = QIcon()
@@ -298,16 +489,21 @@ class returnBtn(QPushButton):
         self.setIcon(icon1)
         self.setIconSize(QSize(24, 24))
         self.setFont(font1)
+        self.setText(label)
 
 
     def returnB(self):
         file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
         local_url = QUrl.fromLocalFile(file_path)
         self.window().ui.webEngineView.load(QUrl(local_url))
+        self.window()
+        self.window().ui.returnButton.hide()
+        self.window().ui.print_btn.hide()
 
     def returnA(self):
         self.window().ui.render.hide()
         self.window().ui.rtbtn.hide()
+        self.window().ui.prntbtn.hide()
 
 class CustList(QListWidget):
 
@@ -316,8 +512,13 @@ class CustList(QListWidget):
             df = gpd.read_file("zones/zones.json")
             df.head(2)
 
+            itemlist = []
+
             for i in range(len(df)):
-                item = df["name"][i] + " - " + df["infos"][i]
+                itemlist.append(df["name"][i] + " - " + df["infos"][i])
+
+            itemlist.sort()
+            for item in itemlist:
                 self.addItem(item)
 
         except:
@@ -326,8 +527,13 @@ class CustList(QListWidget):
                 df = gpd.read_file("zones/zones.json.old")
                 df.head(2)
 
+                itemlist = []
+
                 for i in range(len(df)):
-                    item = df["name"][i] + " - " + df["infos"][i]
+                    itemlist.append(df["name"][i] + " - " + df["infos"][i])
+
+                itemlist.sort()
+                for item in itemlist:
                     self.addItem(item)
 
                 rfile = open("zones/zones.json.old", "r")
@@ -353,7 +559,7 @@ class CustList(QListWidget):
 
     def Clicked(self, item):
         self.window().ui.verticalLayout_9.removeWidget(self.window().ui.navlist)
-        self.window().ui.render = QWebEngineView()
+        self.window().ui.render = customEngineView()
         self.window().ui.render.setObjectName(u"render")
         sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy2.setHorizontalStretch(0)
@@ -365,9 +571,9 @@ class CustList(QListWidget):
         id = getid(item)
 
         if (exists("prepa/"+id+".html")):
-            fle = id+".html"
+            fle = "prepa/"+id+".html"
         elif (exists("prepa/"+id+".pdf")):
-            fle = id+".pdf"
+            fle = "prepa/"+id+".pdf"
         else:
             fle = ""
 
@@ -375,13 +581,8 @@ class CustList(QListWidget):
         url = QUrl.fromLocalFile(file_path)
         self.window().ui.render.setUrl(QUrl(url))
         self.window().ui.render.load(QUrl(url))
+        self.window().ui.render.titleChanged.connect(self.window().ui.render.ChangedB)
         self.window().ui.verticalLayout_9.addWidget(self.window().ui.render)
-
-        self.window().ui.rtbtn = returnBtn()
-        self.window().ui.rtbtn.setText("Retour à la liste")
-        self.window().ui.rtbtn.clicked.connect(self.window().ui.rtbtn.returnA)
-        self.window().ui.verticalLayout_9.addWidget(self.window().ui.rtbtn)
-        self.window().ui.page_2.setLayout(self.window().ui.verticalLayout_9)
 
 
 
@@ -443,7 +644,7 @@ class Ui_MainWindow(object):
 
         self.toggle_button.setFont(font)
         icon = QIcon()
-        icon.addFile(u":/icons/icons/align-left.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/icons/icons/menu.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.toggle_button.setIcon(icon)
         self.toggle_button.setIconSize(QSize(32, 32))
 
@@ -476,10 +677,9 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_7.addWidget(self.pushButton_8)
 
-        self.lineEdit = QLineEdit(self.frame)
-        self.lineEdit.setObjectName(u"lineEdit")
+        self.searchline = searchengine()
 
-        self.horizontalLayout_7.addWidget(self.lineEdit)
+        self.horizontalLayout_7.addWidget(self.searchline)
 
 
         self.horizontalLayout_6.addWidget(self.frame, 0, Qt.AlignLeft)
@@ -563,7 +763,7 @@ class Ui_MainWindow(object):
         self.dashboard_btn.setStyleSheet(u"background-color: rgb(20, 28, 39);\n"
 "border-left: 3px solid rgb(7 ,98 ,160);")
         icon6 = QIcon()
-        icon6.addFile(u":/icons/icons/globe.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon6.addFile(u":/icons/icons/compass.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.dashboard_btn.setIcon(icon6)
         self.dashboard_btn.setIconSize(QSize(24, 24))
 
@@ -573,7 +773,7 @@ class Ui_MainWindow(object):
         self.projects_btn.setObjectName(u"projects_btn")
         self.projects_btn.setStyleSheet(u"")
         icon7 = QIcon()
-        icon7.addFile(u":/icons/icons/align-center.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon7.addFile(u":/icons/icons/list.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.projects_btn.setIcon(icon7)
         self.projects_btn.setIconSize(QSize(24, 24))
 
@@ -587,7 +787,6 @@ class Ui_MainWindow(object):
         self.reports_btn.setIconSize(QSize(24, 24))
 
         self.verticalLayout_4.addWidget(self.reports_btn)
-
 
         self.verticalLayout_3.addWidget(self.widget_3, 0, Qt.AlignTop)
 
@@ -615,7 +814,7 @@ class Ui_MainWindow(object):
         self.settings_btns = QPushButton(self.widget_5)
         self.settings_btns.setObjectName(u"settings_btns")
         icon11 = QIcon()
-        icon11.addFile(u":/icons/icons/settings.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon11.addFile(u":/icons/icons/info.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.settings_btns.setIcon(icon11)
         self.settings_btns.setIconSize(QSize(24, 24))
 
@@ -669,7 +868,7 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 589, 236))
         self.verticalLayout_14 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
-        self.webEngineView = QWebEngineView(self.scrollAreaWidgetContents)
+        self.webEngineView = customEngineView(self.scrollAreaWidgetContents)
         self.webEngineView.setObjectName(u"webEngineView")
         sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy2.setHorizontalStretch(0)
@@ -683,20 +882,13 @@ class Ui_MainWindow(object):
         file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
         local_url = QUrl.fromLocalFile(file_path)
 
-        self.returnButton = returnBtn()
-        self.returnButton.setText("Retour à la carte")
-        self.returnButton.clicked.connect(self.returnButton.returnB)
-
         self.verticalLayout_14.addWidget(self.webEngineView)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
         self.verticalLayout_8.addWidget(self.scrollArea)
 
-        self.verticalLayout_14.addWidget(self.returnButton)
-
         self.stackedWidget.addWidget(self.page)
-
 
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
@@ -710,6 +902,7 @@ class Ui_MainWindow(object):
         self.page_2.setLayout(self.verticalLayout_9)
 
         self.stackedWidget.addWidget(self.page_2)
+
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
         self.verticalLayout_10 = QVBoxLayout(self.page_3)
@@ -773,10 +966,6 @@ class Ui_MainWindow(object):
 
         self.stackedWidget.addWidget(self.page_3)
 
-
-
-
-
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
         self.verticalLayout_11 = QVBoxLayout(self.page_4)
@@ -793,17 +982,36 @@ class Ui_MainWindow(object):
         self.page_6.setObjectName(u"page_6")
         self.verticalLayout_13 = QVBoxLayout(self.page_6)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.label_8 = QLabel(self.page_6)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setFont(font2)
-        self.label_8.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_13.addWidget(self.label_8)
+        self.infoTitle = QPlainTextEdit(self.page_6)
+        self.infoTitle.setObjectName(u"infoTitle")
+        self.infoTitle.setFont(font)
+        self.infoTitle.setPlainText("Développé avec python 3.8 \n\nConçu par et pour les élèves de l'école Navale, ce logiciel vise à centraliser les préparations de quart des navigations qu'ils auront l'occasion de réaliser. \nLa grande expérience de la promotion EN20 se limitant à la rade de Brest et ses alentours, nous espérons voire bientôt les élèves et anciens-élèves d'autre promotions ajouter leur travail et partager leurs connaissances.")
+        self.infoTitle.setReadOnly(True)
+        self.verticalLayout_13.addWidget(self.infoTitle, alignment=Qt.AlignVCenter)
+
+        self.infotodo = QPlainTextEdit(self.page_6)
+        self.infotodo.setObjectName(u"infotodo")
+        self.infotodo.setFont(font)
+        self.infotodo.setPlainText("\n\nSont en cours de développement les fonctionnalités suivantes :\n - Le partage de préparations de quart (validées par un controleur)\n - La possibilité d'éditer et d'annoter les préprarations existantes\n - La mise à jour en ligne du contenu de l'application\n - Ce que vous nous proposerez !")
+        self.infotodo.setReadOnly(True)
+        self.verticalLayout_13.addWidget(self.infotodo, alignment=Qt.AlignVCenter)
+
+        self.infothanks = QPlainTextEdit(self.page_6)
+        self.infothanks.setObjectName(u"infothanks")
+        self.infothanks.setFont(font)
+        self.infothanks.setPlainText("Développement : A. REPPELIN")
+        self.infothanks.setReadOnly(True)
+        self.verticalLayout_13.addWidget(self.infothanks, alignment=Qt.AlignVCenter)
+
+        self.label_8 = easterbutton(self.page_6)
+        self.label_8.setObjectName(u"easter")
+        self.label_8.setFont(font2)
+        self.label_8.clicked.connect(self.label_8.Clicked)
+
+        self.verticalLayout_13.addWidget(self.label_8, alignment=Qt.AlignLeft | Qt.AlignBottom)
 
         self.stackedWidget.addWidget(self.page_6)
-
-        self.verticalLayout_7.addWidget(self.stackedWidget)
-
 
         self.horizontalLayout.addWidget(self.main_body)
 
@@ -844,6 +1052,24 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.widget_7)
 
+        self.page_7 = QWidget(self.widget_3)
+        self.page_7.setObjectName(u"page_7")
+        self.verticalLayout_17 = QVBoxLayout(self.page_7)
+        self.verticalLayout_17.setObjectName(u"verticallayout_17")
+
+        self.printlist = CustList()
+
+        self.verticalLayout_17.addWidget(self.printlist)
+
+        self.page_7.setLayout(self.verticalLayout_17)
+
+        self.stackedWidget.addWidget(self.page_7)
+
+
+        self.verticalLayout_7.addWidget(self.stackedWidget)
+
+        self.webEngineView.titleChanged.connect(self.webEngineView.ChangedA)
+
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -854,7 +1080,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.toggle_button.setText(QCoreApplication.translate("MainWindow", u"  Menu", None))
         self.pushButton_8.setText("")
-        self.lineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search", None))
+        self.searchline.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Rechercher", None))
         self.restoreWindow.setText("")
         self.minimizeWindow.setText("")
         self.closeWindow.setText("")
@@ -862,9 +1088,9 @@ class Ui_MainWindow(object):
         self.projects_btn.setText(QCoreApplication.translate("MainWindow", u"Liste", None))
         self.reports_btn.setText(QCoreApplication.translate("MainWindow", u"Ajouter une préparation", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"More", None))
-        self.settings_btns.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
+        self.settings_btns.setText(QCoreApplication.translate("MainWindow", u"Informations", None))
         self.donatebtn.setText(QCoreApplication.translate("MainWindow", u"Paye moi un café !", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"SETTINGS", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Version: a1.0.0", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"PrepQ by VA SIM ^^", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Navigation :", None))
         self.lineEdit_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Nom", None))

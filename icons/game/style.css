@@ -1,0 +1,28 @@
+html, body {
+	font-size: 15px;
+	font-family: Arial;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-image: url('bgnd.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width: 800px;
+	height: 900px;
+	margin: 0 auto;
+}
+
+canvas {
+	/*background: #fff;*/
+}
+
+.Dinosaur {
+	color: #eee
+}
+
+.controls {
+	text-align: right;
+	color: #aaa;
+}
