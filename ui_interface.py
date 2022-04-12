@@ -12,13 +12,16 @@ from PyQt5 import QtGui
 from PyQt5.QtWebEngineWidgets import QWebEngineSettings
 
 from os.path import exists
+from datetime import date
 
 import maps
 import os
+import re
 import webbrowser
 import PySide2
 import resources_rc
 import warnings
+import shutil
 
 import submit_function as sf
 import geopandas as gpd
@@ -48,6 +51,44 @@ font3.setFamily(u"URW Gothic")
 font3.setPointSize(16)
 font3.setBold(True)
 font3.setWeight(75)
+
+def importprep(filen):
+
+    impdat = gpd.read_file(filen)
+    impdat.head(2)
+
+    path = filen.split('/')
+    path.pop()
+    path = str('/'.join(path))
+
+    for i in range(len(impdat)):
+        id = impdat["id"][i]
+        name = impdat["name"][i]
+        fnm = str(impdat["filename"][i])
+
+        zones = gpd.read_file("zones/zones.json")
+        zones.head(2)
+
+        if testname(name):
+            date = date.today()
+            name += date
+
+        geom = impdat["geometry"][i]
+        geom = str(geom)[10:-2]
+        geom = geom.split(', ')
+        geom = "["+"],[".join(geom)+"]"
+        geom = geom.split(" ")
+        geom = ", ".join(geom)
+        geom = geom.split("],[")
+        geom = "], [".join(geom)
+
+        fpath = path+"/data/"+fnm
+
+        nid = sf.wrt(name, impdat["infos"][i], fpath, geom)
+
+        if exists(path+"/data/images/"+id+".jpg"):
+            shutil.copyfile(path+"/data/images/"+id+".jpg", "prepa/images/"+nid+".jpg")
+
 
 def namechanged(text):
     navname = text
@@ -137,19 +178,99 @@ class searchengine(QLineEdit):
 
 
     def search(self):
-        self.setText("")
 
-#data = [["id", ["mots"]]]
+        try:
+            df = gpd.read_file("zones/zones.json")
+            df.head(2)
 
-#query = self.text().split(" ")
-#for i in query:
-#   dt = []
-#   for j in range data:
-#       if i in j:
-#           dt.append(j)
-#   data = np.unique(dt)
-#
-#
+        except:
+            try:
+                print("Trying old json file")
+                df = gpd.read_file("zones/zones.json.old")
+                df.head(2)
+
+                rfile = open("zones/zones.json.old", "r")
+                file = open("zones/zones.json", "w")
+                file.write(rfile.read())
+
+                return "notfound"
+
+            except:
+                print("Error loading json file.")
+
+        data = []
+
+        for i in range(len(df)):
+            row = []
+            row.append(df["id"][i])
+
+            wordlist = []
+
+            for j in re.split('/| |\\|\-', df["name"][i]):
+                wordlist.append(j.lower())
+
+            for j in re.split('/| |\\|\-', df["infos"][i]):
+                wordlist.append(j.lower())
+
+            row .append(wordlist)
+            data.append(row)
+
+        query = []
+
+        for w in re.split('/| |\\|\-', self.text()):
+            query.append(w.lower())
+
+        for i in query:
+            dt = []
+            for j in range(len(data)):
+                for k in data[j][1]:
+                    if i in k:
+                        dt.append(data[j])
+
+            data = []
+            for i in range(len(dt)):
+                tmp = dt.pop()
+                if tmp not in dt:
+                    data.append(tmp)
+
+        self.window().ui.searchpage = QWidget(self.window().ui.main_body)
+
+        self.window().ui.verticalLayout_17 = QVBoxLayout()
+
+        self.window().ui.searchlist = CustList()
+        self.window().ui.searchlist.itemClicked.connect(self.window().ui.searchlist.searchclicked)
+        self.window().ui.searchlist.clear()
+
+
+
+        tlst = []
+
+        for i in data :
+            for j in range(len(df)):
+                if i[0] == df["id"][j]:
+                    item = df["name"][j] + " - " +df["infos"][j]
+                    tlst.append(item)
+        tlst.sort()
+
+        itemlist = set(tlst)
+
+        for item in itemlist:
+            self.window().ui.searchlist.addItem(item)
+
+        self.window().ui.verticalLayout_17.addWidget(self.window().ui.searchlist)
+
+        self.window().ui.footersrc = QHBoxLayout()
+
+        self.window().ui.srcrtn = returnBtn("Retour")
+        self.window().ui.srcrtn.clicked.connect(self.window().ui.srcrtn.returnC)
+        self.window().ui.footersrc.addWidget(self.window().ui.srcrtn)
+
+        self.window().ui.verticalLayout_17.addLayout(self.window().ui.footersrc)
+
+        self.window().ui.searchpage.setLayout(self.window().ui.verticalLayout_17)
+
+        self.window().ui.stackedWidget.addWidget(self.window().ui.searchpage)
+        self.window().ui.stackedWidget.setCurrentWidget(self.window().ui.searchpage)
 
 
 class easterbutton(QPushButton):
@@ -268,6 +389,28 @@ class customEngineView(QWebEngineView):
             self.window().ui.verticalLayout_13.addWidget(self.window().ui.label_11)
             self.window().ui.verticalLayout_13.addLayout(self.window().ui.horizontalLayout_10, alignment=Qt.AlignVCenter)
             self.window().ui.verticalLayout_13.addWidget(self.window().ui.label_12)
+
+
+    def ChangedD(self):
+
+        title = self.title()
+
+        self.window().ui.srcrtn.setVisible(False)
+
+        self.window().ui.footersrc = QHBoxLayout()
+
+
+        self.window().ui.rtbtn = returnBtn("Retour à la liste")
+        self.window().ui.rtbtn.clicked.connect(self.window().ui.rtbtn.returnD )
+        self.window().ui.footersrc.addWidget(self.window().ui.rtbtn)
+
+        self.window().ui.prntbtn = printbtn(title)
+        self.window().ui.prntbtn.setObjectName(u"print_btn")
+        self.window().ui.footersrc.addWidget(self.window().ui.prntbtn)
+        self.window().ui.prntbtn.clicked.connect(self.window().ui.prntbtn.printf)
+
+        self.window().ui.verticalLayout_17.addLayout(self.window().ui.footersrc)
+        self.window().ui.searchpage.setLayout(self.window().ui.verticalLayout_17)
 
 
 class quitbtn(QPushButton):
@@ -425,7 +568,7 @@ class browsebtn(QPushButton):
         self.setFont(font1)
 
     def Clicked(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open file', ':', 'Préparation (*.pdf *.html)')
+        fname = QFileDialog.getOpenFileName(self, 'Open file', ':', 'Préparation (*.pdf *.html *.json)')
         self.setText(fname[0])
         self.filename = fname[0]
 
@@ -446,6 +589,25 @@ class submitbtn(QPushButton):
         if (self.window().ui.browse.filename == ""):
             self.window().ui.dial = dialog("Vous avez oublié d'ajouter une préparation.")
             self.window().ui.dial.show()
+
+        elif (self.window().ui.browse.filename[-5:] == ".json"):
+            #try:
+            importprep(self.window().ui.browse.filename)
+            self.window().ui.dial = imported("Vos préparations de quart ont été ajoutées à votre liste de préparations !")
+            self.window().ui.dial.show()
+            self.window().ui.navlist.rsetlist()
+            self.window().ui.lineEdit_2.setText("")
+            self.window().ui.infos.setPlainText("")
+            self.window().ui.geom.setPlainText("")
+            self.window().ui.browse.setText("Joindre la préparation")
+            self.window().ui.browse.filename = ""
+            maps.rsetmap()
+            file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
+            local_url = QUrl.fromLocalFile(file_path)
+            self.window().ui.webEngineView.load(QUrl(local_url))
+            #except:
+            #    self.window().ui.dial = dialog("L'importation n'a pas fonctionnée, vérifiez l'intégrité de la donnée.\nLe format .json est senséêtre utilisé exclusivement pour l'importation multiple/les mises à jour de préparations.")
+            #    self.window().ui.dial.show()
 
         elif ((self.window().ui.lineEdit_2.text() == '') or (self.window().ui.infos.toPlainText() == '')):
             self.window().ui.dial = dialog("Vous n'avez pas renseigner toutes les informations nécessaires")
@@ -507,21 +669,26 @@ class returnBtn(QPushButton):
         self.window().ui.rtbtn.hide()
         self.window().ui.prntbtn.hide()
 
+    def returnC(self):
+        self.window().ui.searchpage.hide()
+        self.window().ui.stackedWidget.setCurrentWidget(self.window().ui.page)
+
+    def returnD(self):
+        self.window().ui.render.hide()
+        self.window().ui.rtbtn.hide()
+        self.window().ui.prntbtn.hide()
+        self.window().ui.srcrtn.setVisible(True)
+
+
 class CustList(QListWidget):
 
     def setlist(self):
+
+        itemlist = []
+
         try:
             df = gpd.read_file("zones/zones.json")
             df.head(2)
-
-            itemlist = []
-
-            for i in range(len(df)):
-                itemlist.append(df["name"][i] + " - " + df["infos"][i])
-
-            itemlist.sort()
-            for item in itemlist:
-                self.addItem(item)
 
         except:
             try:
@@ -529,21 +696,20 @@ class CustList(QListWidget):
                 df = gpd.read_file("zones/zones.json.old")
                 df.head(2)
 
-                itemlist = []
-
-                for i in range(len(df)):
-                    itemlist.append(df["name"][i] + " - " + df["infos"][i])
-
-                itemlist.sort()
-                for item in itemlist:
-                    self.addItem(item)
-
                 rfile = open("zones/zones.json.old", "r")
                 file = open("zones/zones.json", "w")
                 file.write(rfile.read())
 
             except:
                 print("Error loading json file.")
+
+        for i in range(len(df)):
+            if df["id"][i] != "":
+                itemlist.append(df["name"][i] + " - " + df["infos"][i])
+
+        itemlist.sort()
+        for item in itemlist:
+            self.addItem(item)
 
     def rsetlist(self):
         self.clear()
@@ -556,7 +722,38 @@ class CustList(QListWidget):
 
         self.setlist()
 
-        self.itemClicked.connect(self.Clicked)
+
+
+
+    def searchclicked(self, item):
+        self.window().ui.verticalLayout_17.removeWidget(self.window().ui.searchlist)
+        self.window().ui.render = customEngineView()
+        self.window().ui.render.setObjectName(u"render")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.window().ui.render.sizePolicy().hasHeightForWidth())
+        self.window().ui.render.setSizePolicy(sizePolicy2)
+        self.window().ui.render.setMinimumSize(QSize(0, 0))
+        self.window().ui.render.page().settings().setAttribute(PySide2.QtWebEngineWidgets.QWebEngineSettings.PluginsEnabled, True)
+        id = getid(item)
+
+        if (exists("prepa/"+id+".html")):
+            fle = "prepa/"+id+".html"
+        elif (exists("prepa/"+id+".pdf")):
+            fle = "prepa/"+id+".pdf"
+        else:
+            fle = ""
+
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), fle))
+        url = QUrl.fromLocalFile(file_path)
+        self.window().ui.render.setUrl(QUrl(url))
+        self.window().ui.render.load(QUrl(url))
+
+        self.window().ui.render.titleChanged.connect(self.window().ui.render.ChangedD)
+
+
+        self.window().ui.verticalLayout_17.addWidget(self.window().ui.render)
 
 
     def Clicked(self, item):
@@ -898,6 +1095,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
 
         self.navlist = CustList()
+        self.navlist.itemClicked.connect(self.navlist.Clicked)
 
         self.verticalLayout_9.addWidget(self.navlist)
 
@@ -990,6 +1188,7 @@ class Ui_MainWindow(object):
         self.infoTitle.setFont(font)
         self.infoTitle.setPlainText("Développé avec python 3.8 \n\nConçu par et pour les élèves de l'école Navale, ce logiciel vise à centraliser les préparations de quart des navigations qu'ils auront l'occasion de réaliser. \nLa grande expérience de la promotion EN20 se limitant à la rade de Brest et ses alentours, nous espérons voire bientôt les élèves et anciens-élèves d'autre promotions ajouter leur travail et partager leurs connaissances.")
         self.infoTitle.setReadOnly(True)
+
         self.verticalLayout_13.addWidget(self.infoTitle, alignment=Qt.AlignVCenter)
 
         self.infotodo = QPlainTextEdit(self.page_6)
@@ -1053,20 +1252,6 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout.addWidget(self.widget_7)
-
-        self.page_7 = QWidget(self.widget_3)
-        self.page_7.setObjectName(u"page_7")
-        self.verticalLayout_17 = QVBoxLayout(self.page_7)
-        self.verticalLayout_17.setObjectName(u"verticallayout_17")
-
-        self.printlist = CustList()
-
-        self.verticalLayout_17.addWidget(self.printlist)
-
-        self.page_7.setLayout(self.verticalLayout_17)
-
-        self.stackedWidget.addWidget(self.page_7)
-
 
         self.verticalLayout_7.addWidget(self.stackedWidget)
 

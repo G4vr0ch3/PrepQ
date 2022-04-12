@@ -6,6 +6,9 @@ import shutil
 
 import geopandas as gpd
 
+from datetime import date
+
+
 def wrt (name, infos, docpath, geo=""):
     with open("zones/zones.json", "r", encoding='utf-8') as file:
         content = file.read()
@@ -26,18 +29,20 @@ def wrt (name, infos, docpath, geo=""):
 
     tnm = tnm.upper()
 
+    typ = ftype(docpath)
+    fnam = "prepa/" + tnm + "." + typ
+
+    shutil.copyfile(docpath, fnam)
+
     with open("zones/zones.json", "w", encoding='utf-8') as file:
-        newline = u'{"type":"Feature","id":"'+tnm+'","properties":{"name":"'+name+'", "infos":"'+infos+' - Ajoutée localement"},"geometry":{"type":"Polygon","coordinates":[['+geo+']]}}'
+        newline = u'{"type":"Feature","id":"'+tnm+'","properties":{"name":"'+name+'", "infos":"'+infos+' - Ajoutée localement", "filename":"'+tnm+'.'+typ+'"},"geometry":{"type":"Polygon","coordinates":[['+geo+']]}}'
         content = content[:-5]
         content = content + ',\n' + '\n' + newline + '\n' + '\n' + ']}' + '\n'
         content.encode('utf-8')
         file.write(content)
         file.close()
 
-    typ = ftype(docpath)
-    fnam = "prepa/" + tnm + "." + typ
-
-    shutil.copyfile(docpath, fnam)
+    return tnm
 
 
 def ftype(path):
@@ -52,7 +57,9 @@ def ftype(path):
 def testid(tnm):
 
     df = gpd.read_file("zones/zones.json")
-    for i in df["id"]:
-        if tnm == i:
+    df.head(2)
+
+    for i in range(len(df)):
+        if tnm == df["id"][i]:
             return False
     return True

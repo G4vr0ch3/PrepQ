@@ -37,19 +37,20 @@ def create(map):
 		folium.GeoJson(data=area, style_function=style).add_to(map)
 
 		for i in range(len(area)):
-			if (exists("prepa/"+area["id"][i]+".html")):
-				html = """<p>{}</p><a href="prepa/{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
-			elif (exists("prepa/"+area["id"][i]+".pdf")):
-				html = """<p>{}</p><a href="prepa/{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
-			else:
-				html = """<p>Pas de préparation de quart disponnible.</p>"""
+			if area["id"][i] != "":
+				if (exists("prepa/"+area["id"][i]+".html")):
+					html = """<p>{}</p><a href="prepa/{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+				elif (exists("prepa/"+area["id"][i]+".pdf")):
+					html = """<p>{}</p><a href="prepa/{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+				else:
+					html = """<p>Pas de préparation de quart disponnible.</p>"""
 
-			try:
-				lon = area["geometry"][i].centroid.x
-				lat = area["geometry"][i].centroid.y
-				folium.Marker(location=[lat, lon], popup=html).add_to(map)
-			except:
-				print("No marker available")
+				try:
+					lon = area["geometry"][i].centroid.x
+					lat = area["geometry"][i].centroid.y
+					folium.Marker(location=[lat, lon], popup=html).add_to(map)
+				except:
+					print("No marker available")
 
 	except:
 		try:
@@ -74,21 +75,20 @@ def create(map):
 			folium.GeoJson(data=area, style_function=style).add_to(map)
 
 			for i in range(len(area)):
-				if (exists("prepa/"+area["id"][i]+".html")):
-					html = """<p>{}</p><a href="prepa/{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
-					print(html)
-				elif (exists("prepa/"+area["id"][i]+".pdf")):
-					html = """<p>{}</p><a href="prepa/{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
-					print(html)
-				else:
-					html = """<p>Pas de préparation de quart disponnible.</p>"""
+				if area["id"][i] != "":
+					if (exists("prepa/"+area["id"][i]+".html")):
+						html = """<p>{}</p><a href="prepa/{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+					elif (exists("prepa/"+area["id"][i]+".pdf")):
+						html = """<p>{}</p><a href="prepa/{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+					else:
+						html = """<p>Pas de préparation de quart disponnible.</p>"""
 
-				try:
-					lon = area["geometry"][i].centroid.x
-					lat = area["geometry"][i].centroid.y
-					folium.Marker(location=[lat, lon], popup=html).add_to(map)
-				except:
-					print("No marker available")
+					try:
+						lon = area["geometry"][i].centroid.x
+						lat = area["geometry"][i].centroid.y
+						folium.Marker(location=[lat, lon], popup=html).add_to(map)
+					except:
+						print("No marker available")
 
 			rfile = open("zones/zones.json.old", "r")
 			file = open("zones/zones.json", "w")
