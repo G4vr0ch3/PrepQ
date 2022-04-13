@@ -1195,27 +1195,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_13 = QVBoxLayout(self.page_6)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
 
-        self.infoTitle = QPlainTextEdit(self.page_6)
+        self.infoTitle = QTextEdit(self.page_6)
         self.infoTitle.setObjectName(u"infoTitle")
         self.infoTitle.setFont(font)
-        self.infoTitle.setPlainText("Développé avec python 3.8 \n\nConçu par et pour les élèves de l'école Navale, ce logiciel vise à centraliser les préparations de quart des navigations qu'ils auront l'occasion de réaliser. \nLa grande expérience de la promotion EN20 se limitant à la rade de Brest et ses alentours, nous espérons voire bientôt les élèves et anciens-élèves d'autre promotions ajouter leur travail et partager leurs connaissances.")
+        self.infoTitle.setText("Développé avec python 3.8 \n\nConçu par et pour les élèves de l'école Navale, ce logiciel vise à centraliser les préparations de quart des navigations qu'ils auront l'occasion de réaliser. \nLa grande expérience de la promotion EN20 se limitant à la rade de Brest et ses alentours, nous espérons voire bientôt les élèves et anciens-élèves d'autre promotions ajouter leur travail et partager leurs connaissances.\n\nSont en cours de développement les fonctionnalités suivantes :\n - Le partage de préparations de quart (validées par un controleur)\n - La possibilité d'éditer et d'annoter les préprarations existantes\n - La mise à jour en ligne du contenu de l'application\n - Ce que vous nous proposerez !\n\n\nDéveloppement : A. REPPELIN")
         self.infoTitle.setReadOnly(True)
+        self.infoTitle.setFixedHeight(int(self.infoTitle.document().size().height() + 400))
+        self.infoTitle.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
 
         self.verticalLayout_13.addWidget(self.infoTitle, alignment=Qt.AlignVCenter)
-
-        self.infotodo = QPlainTextEdit(self.page_6)
-        self.infotodo.setObjectName(u"infotodo")
-        self.infotodo.setFont(font)
-        self.infotodo.setPlainText("\n\nSont en cours de développement les fonctionnalités suivantes :\n - Le partage de préparations de quart (validées par un controleur)\n - La possibilité d'éditer et d'annoter les préprarations existantes\n - La mise à jour en ligne du contenu de l'application\n - Ce que vous nous proposerez !")
-        self.infotodo.setReadOnly(True)
-        self.verticalLayout_13.addWidget(self.infotodo, alignment=Qt.AlignVCenter)
-
-        self.infothanks = QPlainTextEdit(self.page_6)
-        self.infothanks.setObjectName(u"infothanks")
-        self.infothanks.setFont(font)
-        self.infothanks.setPlainText("Développement : A. REPPELIN")
-        self.infothanks.setReadOnly(True)
-        self.verticalLayout_13.addWidget(self.infothanks, alignment=Qt.AlignVCenter)
 
         self.label_8 = easterbutton(self.page_6)
         self.label_8.setObjectName(u"easter")
