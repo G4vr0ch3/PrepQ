@@ -247,7 +247,7 @@ class searchengine(QLineEdit):
 
         for i in data :
             for j in range(len(df)):
-                if i[0] == df["id"][j]:
+                if i[0] == df["id"][j] and df["id"][j] != "":
                     item = df["name"][j] + " - " +df["infos"][j]
                     tlst.append(item)
         tlst.sort()
@@ -261,9 +261,13 @@ class searchengine(QLineEdit):
 
         self.window().ui.footersrc = QHBoxLayout()
 
-        self.window().ui.srcrtn = returnBtn("Retour")
+        self.window().ui.srcrtn = returnBtn("Retour à la carte")
         self.window().ui.srcrtn.clicked.connect(self.window().ui.srcrtn.returnC)
         self.window().ui.footersrc.addWidget(self.window().ui.srcrtn)
+
+        self.window().ui.srcrtnl = returnBtn("Retour à la liste")
+        self.window().ui.srcrtnl.clicked.connect(self.window().ui.srcrtnl.returnE)
+        self.window().ui.footersrc.addWidget(self.window().ui.srcrtnl)
 
         self.window().ui.verticalLayout_17.addLayout(self.window().ui.footersrc)
 
@@ -318,12 +322,13 @@ class printbtn(QPushButton):
         webbrowser.open(link)
 
 class customEngineView(QWebEngineView):
+
     def ChangedA(self):
 
         title = self.title()
 
 
-        if (title != 'output.html'):
+        if (title != "output.html"):
 
             self.window().ui.footer = QHBoxLayout()
 
@@ -338,6 +343,7 @@ class customEngineView(QWebEngineView):
 
             self.window().ui.verticalLayout_14.addLayout(self.window().ui.footer)
             self.window().ui.page.setLayout(self.window().ui.verticalLayout_14)
+
 
     def ChangedB(self):
 
@@ -591,23 +597,25 @@ class submitbtn(QPushButton):
             self.window().ui.dial.show()
 
         elif (self.window().ui.browse.filename[-5:] == ".json"):
-            #try:
-            importprep(self.window().ui.browse.filename)
-            self.window().ui.dial = imported("Vos préparations de quart ont été ajoutées à votre liste de préparations !")
-            self.window().ui.dial.show()
-            self.window().ui.navlist.rsetlist()
-            self.window().ui.lineEdit_2.setText("")
-            self.window().ui.infos.setPlainText("")
-            self.window().ui.geom.setPlainText("")
-            self.window().ui.browse.setText("Joindre la préparation")
-            self.window().ui.browse.filename = ""
-            maps.rsetmap()
-            file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
-            local_url = QUrl.fromLocalFile(file_path)
-            self.window().ui.webEngineView.load(QUrl(local_url))
-            #except:
-            #    self.window().ui.dial = dialog("L'importation n'a pas fonctionnée, vérifiez l'intégrité de la donnée.\nLe format .json est senséêtre utilisé exclusivement pour l'importation multiple/les mises à jour de préparations.")
-            #    self.window().ui.dial.show()
+            try:
+                importprep(self.window().ui.browse.filename)
+                self.window().ui.dial = imported("Vos préparations de quart ont été ajoutées à votre liste de préparations !")
+                self.window().ui.dial.show()
+                self.window().ui.navlist.rsetlist()
+                self.window().ui.lineEdit_2.setText("")
+                self.window().ui.infos.setPlainText("")
+                self.window().ui.geom.setPlainText("")
+                self.window().ui.browse.setText("Joindre la préparation")
+                self.window().ui.browse.filename = ""
+
+                maps.rsetmap()
+                file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "output.html"))
+                local_url = QUrl.fromLocalFile(file_path)
+                self.window().ui.webEngineView.load(QUrl(local_url))
+
+            except:
+                self.window().ui.dial = dialog("L'importation n'a pas fonctionnée, vérifiez l'intégrité de la donnée.\nLe format .json est senséêtre utilisé exclusivement pour l'importation multiple/les mises à jour de préparations.")
+                self.window().ui.dial.show()
 
         elif ((self.window().ui.lineEdit_2.text() == '') or (self.window().ui.infos.toPlainText() == '')):
             self.window().ui.dial = dialog("Vous n'avez pas renseigner toutes les informations nécessaires")
@@ -678,6 +686,10 @@ class returnBtn(QPushButton):
         self.window().ui.rtbtn.hide()
         self.window().ui.prntbtn.hide()
         self.window().ui.srcrtn.setVisible(True)
+
+    def returnE(self):
+        self.window().ui.searchpage.hide()
+        self.window().ui.stackedWidget.setCurrentWidget(self.window().ui.page_2)
 
 
 class CustList(QListWidget):

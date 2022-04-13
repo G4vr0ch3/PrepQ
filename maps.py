@@ -38,10 +38,8 @@ def create(map):
 
 		for i in range(len(area)):
 			if area["id"][i] != "":
-				if (exists("prepa/"+area["id"][i]+".html")):
-					html = """<p>{}</p><a href="prepa/{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
-				elif (exists("prepa/"+area["id"][i]+".pdf")):
-					html = """<p>{}</p><a href="prepa/{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+				if (exists("prepa/"+area["filename"][i])) or (exists("prepa/"+area["filename"][i])):
+					html = """<p>{}</p><a href="prepa/{}"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["filename"][i], area["name"][i])
 				else:
 					html = """<p>Pas de préparation de quart disponnible.</p>"""
 
@@ -76,10 +74,8 @@ def create(map):
 
 			for i in range(len(area)):
 				if area["id"][i] != "":
-					if (exists("prepa/"+area["id"][i]+".html")):
-						html = """<p>{}</p><a href="prepa/{}.html"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
-					elif (exists("prepa/"+area["id"][i]+".pdf")):
-						html = """<p>{}</p><a href="prepa/{}.pdf"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["id"][i], area["name"][i])
+					if (exists("prepa/"+area["filename"][i])) or (exists("prepa/"+area["filename"][i])):
+						html = """<p>{}</p><a href="prepa/{}"> <button type="button" class="btn btn-primary">{}</button></a>""".format(area["infos"][i], area["filename"][i], area["name"][i])
 					else:
 						html = """<p>Pas de préparation de quart disponnible.</p>"""
 
